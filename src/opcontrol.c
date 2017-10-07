@@ -12,6 +12,16 @@
 
 #include "main.h"
 
+// uncomment this line to enable arcade controls
+#define TANK_CONTROLS
+#define THRESHOLD 4
+
+// returns 0 when -THRESHOLD>=value>=THRESHOLD to prevent joystick ghosting
+int threshold(int value)
+{
+    return abs(value) > THRESHOLD ? value : 0;
+}
+
 /*
  * Runs the user operator control code. This function will be started in its own task with the
  * default priority and stack size whenever the robot is enabled via the Field Management System
@@ -31,8 +41,21 @@
  */
 void operatorControl()
 {
+    int left;
+    int right;
     while (1)
     {
+#ifdef TANK_CONTROLS
+        left = threshold(joystickGetAnalog(1, 3));
+        right = threshold(joystickGetAnalog(1, 2));
+#else
+        left = threshold(joystickGetAnalog(1, 3)) + threshold(joystickGetAnalog(1, 1));
+        right = threshold(joystickGetAnalog(1, 3)) - threshold(joystickGetAnalog(1, 1));
+#endif
+        motorSet(DRIVE_FL, -left);
+        motorSet(DRIVE_BL, -left);
+        motorSet(DRIVE_FR, right);
+        motorSet(DRIVE_BR, right);
         delay(20);
     }
 }

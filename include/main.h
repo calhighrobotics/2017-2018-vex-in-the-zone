@@ -27,6 +27,11 @@
 
 #include <API.h>
 
+#define DRIVE_BL 2
+#define DRIVE_FL 3
+#define DRIVE_FR 4
+#define DRIVE_BR 5
+
 // Allow usage of this file in C++ programs
 #ifdef __cplusplus
 extern "C" {
