@@ -16,7 +16,7 @@
 #define TANK_CONTROLS
 #define THRESHOLD 4
 
-// returns 0 when -THRESHOLD>=value>=THRESHOLD to prevent joystick ghosting
+// returns 0 when -THRESHOLD<=value<=THRESHOLD to prevent joystick ghosting
 int threshold(int value)
 {
     return abs(value) > THRESHOLD ? value : 0;
