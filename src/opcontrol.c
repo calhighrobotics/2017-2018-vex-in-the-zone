@@ -43,6 +43,8 @@ void operatorControl()
 {
     int left;
     int right;
+    bool liftUp;
+    bool liftDown;
     while (1)
     {
 #ifdef TANK_CONTROLS
@@ -52,10 +54,27 @@ void operatorControl()
         left = threshold(joystickGetAnalog(1, 3)) + threshold(joystickGetAnalog(1, 1));
         right = threshold(joystickGetAnalog(1, 3)) - threshold(joystickGetAnalog(1, 1));
 #endif
+        liftUp = joystickGetDigital(1, 6, JOY_UP);
+        liftDown = joystickGetDigital(1, 6, JOY_DOWN);
         motorSet(DRIVE_FL, -left);
         motorSet(DRIVE_BL, -left);
         motorSet(DRIVE_FR, right);
         motorSet(DRIVE_BR, right);
+        if (liftUp && !liftDown)
+        {
+            motorSet(LIFT_1, 127);
+            motorSet(LIFT_2, -127);
+        }
+        else if (!liftUp && liftDown)
+        {
+            motorSet(LIFT_1, -127);
+            motorSet(LIFT_2, 127);
+        }
+        else
+        {
+            motorSet(LIFT_1, 0);
+            motorSet(LIFT_2, 0);
+        }
         delay(20);
     }
 }
