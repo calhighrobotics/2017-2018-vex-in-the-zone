@@ -22,6 +22,13 @@ extern "C" {
 #define SAD_LONELY_PORT 9 // :(
 #define LIFT_2 10
 
+// functions that control the various parts of the robot
+void setLeftDriveTrain(int speed);
+void setRightDriveTrain(int speed);
+void setLift(int speed);
+void setClaw(int speed);
+void setMobileGoalLift(int speed);
+
 // these last 4 functions down here are what PROS uses internally to do cool
 //  stuff so it's not recommended to call them within the actual code
 
