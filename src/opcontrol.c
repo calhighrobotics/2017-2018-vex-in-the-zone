@@ -57,8 +57,8 @@ void operatorControl()
         // gather button input
         bool liftUp = joystickGetDigital(1, 6, JOY_UP);
         bool liftDown = joystickGetDigital(1, 6, JOY_DOWN);
-        bool clawOpen = joystickGetDigital(1, 5, JOY_UP);
-        bool clawClose = joystickGetDigital(1, 5, JOY_DOWN);
+        bool clawOpen = joystickGetDigital(1, 7, JOY_UP);
+        bool clawClose = joystickGetDigital(1, 7, JOY_DOWN);
         bool mglUp = joystickGetDigital(1, 8, JOY_UP);
         bool mglDown = joystickGetDigital(1, 8, JOY_DOWN);
         // set all the other devices accordingly
