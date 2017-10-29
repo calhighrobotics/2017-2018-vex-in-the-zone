@@ -16,8 +16,8 @@ void setRightDriveTrain(int speed)
 
 void setLift(int speed)
 {
-    motorSet(LIFT_1, speed);
-    motorSet(LIFT_2, -speed);
+    motorSet(LIFT_1, -speed);
+    motorSet(LIFT_2, speed);
 }
 
 void setClaw(int speed)
@@ -28,5 +28,5 @@ void setClaw(int speed)
 void setMobileGoalLift(int speed)
 {
     motorSet(MGL_LEFT, speed);
-    motorSet(MGL_RIGHT, speed);
+    motorSet(MGL_RIGHT, -speed);
 }
