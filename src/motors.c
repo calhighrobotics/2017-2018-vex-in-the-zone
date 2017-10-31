@@ -4,14 +4,14 @@
 
 void setLeftDriveTrain(int speed)
 {
-    motorSet(DRIVE_FL, -speed);
-    motorSet(DRIVE_BL, -speed);
+    motorSet(DRIVE_FL, speed);
+    motorSet(DRIVE_BL, speed);
 }
 
 void setRightDriveTrain(int speed)
 {
-    motorSet(DRIVE_FR, speed);
-    motorSet(DRIVE_BR, speed);
+    motorSet(DRIVE_FR, -speed);
+    motorSet(DRIVE_BR, -speed);
 }
 
 void setLift(int speed)
