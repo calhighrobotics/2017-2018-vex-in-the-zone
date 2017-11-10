@@ -10,6 +10,8 @@
 extern "C" {
 #endif
 
+#define ROBOT_NAME "Bart Bart"
+
 // ports that are defined for the robot
 #define LIFT_1 1
 #define DRIVE_BL 2
@@ -22,11 +24,14 @@ extern "C" {
 #define SAD_LONELY_PORT 9 // :(
 #define LIFT_2 10
 
-// functions that control the various parts of the robot
+// + forward, - backward
 void setLeftDriveTrain(int speed);
 void setRightDriveTrain(int speed);
+// + up, - down
 void setLift(int speed);
+// + closes, - opens
 void setClaw(int speed);
+// + up, - down
 void setMobileGoalLift(int speed);
 
 // these last 4 functions down here are what PROS uses internally to do cool

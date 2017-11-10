@@ -22,7 +22,7 @@ void setLift(int speed)
 
 void setClaw(int speed)
 {
-    motorSet(CLAW, speed);
+    motorSet(CLAW, -speed);
 }
 
 void setMobileGoalLift(int speed)
