@@ -21,7 +21,7 @@ extern "C" {
 #define CLAW 6
 #define MGL_LEFT 7
 #define MGL_RIGHT 8
-#define SAD_LONELY_PORT 9 // :(
+#define LIFT_SERVO 9
 #define LIFT_2 10
 
 // + forward, - backward
@@ -29,7 +29,11 @@ void setLeftDriveTrain(int speed);
 void setRightDriveTrain(int speed);
 // + up, - down
 void setLift(int speed);
+<<<<<<< HEAD
 // + closes, - opens
+=======
+void lockLift(bool locked);
+>>>>>>> add-lift-servo
 void setClaw(int speed);
 // + up, - down
 void setMobileGoalLift(int speed);

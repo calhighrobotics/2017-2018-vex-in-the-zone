@@ -151,3 +151,46 @@ int speedControl(int speed, bool forwards, bool backwards)
     }
     return 0;
 }
+<<<<<<< HEAD
+=======
+
+// main point of execution for the driver control period
+void operatorControl()
+{
+    // keeps track of the current time since the last opcontrol loop
+    unsigned long time = millis();
+    // goes into an infinite loop, constantly receiving and responding to input
+    while (1)
+    {
+
+        // gather joystick input
+#ifdef TANK_CONTROLS
+        // tank controls
+        int left = threshold(joystickGetAnalog(1, 3));
+        int right = threshold(joystickGetAnalog(1, 2));
+#else
+        // arcade controls
+        int left = threshold(joystickGetAnalog(1, 3)) +
+            threshold(joystickGetAnalog(1, 1));
+        int right = threshold(joystickGetAnalog(1, 3)) -
+            threshold(joystickGetAnalog(1, 1));
+#endif
+        // set the drive train motors accordingly
+        setLeftDriveTrain(left);
+        setRightDriveTrain(right);
+        // gather button input
+        bool liftUp = joystickGetDigital(1, 6, JOY_UP);
+        bool liftDown = joystickGetDigital(1, 6, JOY_DOWN);
+        bool clawOpen = joystickGetDigital(1, 7, JOY_UP);
+        bool clawClose = joystickGetDigital(1, 7, JOY_DOWN);
+        bool mglUp = joystickGetDigital(1, 8, JOY_UP);
+        bool mglDown = joystickGetDigital(1, 8, JOY_DOWN);
+        // set all the other devices accordingly
+        setLift(speedControl(LIFT_SPEED, liftUp, liftDown));
+        setClaw(speedControl(CLAW_SPEED, clawOpen, clawClose));
+        setMobileGoalLift(speedControl(MGL_SPEED, mglUp, mglDown));
+        // wait a bit before receiving input again
+        taskDelayUntil(&time, POLL_SPEED);
+    }
+}
+>>>>>>> add-lift-servo
