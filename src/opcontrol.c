@@ -11,6 +11,8 @@
 #define LIFT_SPEED 127
 #define CLAW_SPEED 63
 #define MGL_SPEED 63
+// time in milliseconds between each opcontrol loop
+#define POLL_SPEED 20ul
 
 // returns what was given if the value exceeds the threshold, else 0
 // prevents joystick ghosting
@@ -36,6 +38,8 @@ int speedControl(int speed, bool forwards, bool backwards)
 // main point of execution for the driver control period
 void operatorControl()
 {
+    // keeps track of the current time since the last opcontrol loop
+    unsigned long time = millis();
     // goes into an infinite loop, constantly receiving and responding to input
     while (1)
     {
@@ -66,6 +70,6 @@ void operatorControl()
         setClaw(speedControl(CLAW_SPEED, clawOpen, clawClose));
         setMobileGoalLift(speedControl(MGL_SPEED, mglUp, mglDown));
         // wait a bit before receiving input again
-        delay(20);
+        taskDelayUntil(&time, POLL_SPEED);
     }
 }
