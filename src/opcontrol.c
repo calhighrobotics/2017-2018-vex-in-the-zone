@@ -14,7 +14,8 @@
 // the time in milliseconds between polls for driver input
 #define POLL_SPEED 20ul
 // the time in milliseconds that it takes to fully open the claw
-#define CLAW_OPEN_TIME 500ul
+#define CLAW_OPEN_TIME 125
+#define CLAW_CLOSE_TIME 250
 
 // returns what was given if the value exceeds the threshold, else 0, to prevent
 //  joystick ghosting
@@ -72,15 +73,15 @@ static bool clawOpen = true;
 static bool clawPressed = false;
 static bool lastClawPressed;
 
-void setClawTimer()
+void setClawTimer(int clawTime)
 {
     if (clawTimer <= 0)
     {
-        clawTimer = CLAW_OPEN_TIME;
+        clawTimer = clawTime;
     }
     else
     {
-        clawTimer = CLAW_OPEN_TIME - clawTimer;
+        clawTimer = clawTime - clawTimer;
     }
 }
 
@@ -89,7 +90,7 @@ void controlClaw()
     // for the claw, pressing once will open it, pressing once again will
     //  close it continuously to lock onto the cone, and so on
     lastClawPressed = clawPressed;
-    clawPressed = joystickGetDigital(1, 7, JOY_UP);
+    clawPressed = joystickGetDigital(1, 8, JOY_RIGHT);
     if (clawPressed && !lastClawPressed)
     {
         // open or close the claw based on the claw's current state
@@ -97,13 +98,13 @@ void controlClaw()
         {
             // close claw
             setClaw(CLAW_SPEED);
-            setClawTimer();
+            setClawTimer(CLAW_CLOSE_TIME);
         }
         else
         {
             // open claw
             setClaw(-CLAW_SPEED);
-            setClawTimer();
+            setClawTimer(CLAW_OPEN_TIME);
         }
         // switch the claw's state between open and closed
         clawOpen = !clawOpen;
@@ -151,46 +152,3 @@ int speedControl(int speed, bool forwards, bool backwards)
     }
     return 0;
 }
-<<<<<<< HEAD
-=======
-
-// main point of execution for the driver control period
-void operatorControl()
-{
-    // keeps track of the current time since the last opcontrol loop
-    unsigned long time = millis();
-    // goes into an infinite loop, constantly receiving and responding to input
-    while (1)
-    {
-
-        // gather joystick input
-#ifdef TANK_CONTROLS
-        // tank controls
-        int left = threshold(joystickGetAnalog(1, 3));
-        int right = threshold(joystickGetAnalog(1, 2));
-#else
-        // arcade controls
-        int left = threshold(joystickGetAnalog(1, 3)) +
-            threshold(joystickGetAnalog(1, 1));
-        int right = threshold(joystickGetAnalog(1, 3)) -
-            threshold(joystickGetAnalog(1, 1));
-#endif
-        // set the drive train motors accordingly
-        setLeftDriveTrain(left);
-        setRightDriveTrain(right);
-        // gather button input
-        bool liftUp = joystickGetDigital(1, 6, JOY_UP);
-        bool liftDown = joystickGetDigital(1, 6, JOY_DOWN);
-        bool clawOpen = joystickGetDigital(1, 7, JOY_UP);
-        bool clawClose = joystickGetDigital(1, 7, JOY_DOWN);
-        bool mglUp = joystickGetDigital(1, 8, JOY_UP);
-        bool mglDown = joystickGetDigital(1, 8, JOY_DOWN);
-        // set all the other devices accordingly
-        setLift(speedControl(LIFT_SPEED, liftUp, liftDown));
-        setClaw(speedControl(CLAW_SPEED, clawOpen, clawClose));
-        setMobileGoalLift(speedControl(MGL_SPEED, mglUp, mglDown));
-        // wait a bit before receiving input again
-        taskDelayUntil(&time, POLL_SPEED);
-    }
-}
->>>>>>> add-lift-servo

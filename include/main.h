@@ -29,11 +29,7 @@ void setLeftDriveTrain(int speed);
 void setRightDriveTrain(int speed);
 // + up, - down
 void setLift(int speed);
-<<<<<<< HEAD
 // + closes, - opens
-=======
-void lockLift(bool locked);
->>>>>>> add-lift-servo
 void setClaw(int speed);
 // + up, - down
 void setMobileGoalLift(int speed);
