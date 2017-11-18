@@ -13,16 +13,6 @@
 #define MGL_SPEED 63
 // the time in milliseconds between polls for driver input
 #define POLL_SPEED 20ul
-// the time in milliseconds that it takes to fully open the claw
-#define CLAW_OPEN_TIME 125
-#define CLAW_CLOSE_TIME 250
-
-// returns what was given if the value exceeds the threshold, else 0, to prevent
-//  joystick ghosting
-static int threshold(int value);
-
-// returns given speed based on whether you want to go forwards or backwards
-static int speedControl(int speed, bool forwards, bool backwards);
 
 // these functions get and respond to driver input for every different part
 // operatorControl() should be calling these functions in the order below
@@ -30,6 +20,13 @@ static void controlDriveTrain();
 static void controlClaw();
 static void controlLift();
 static void controlMobileGoalLift();
+
+// returns what was given if the value exceeds the threshold, else 0 to prevent
+//  joystick ghosting
+static int threshold(int value);
+
+// returns given speed based on whether you want to go forwards or backwards
+static int speedControl(int speed, bool forwards, bool backwards);
 
 // main point of execution for the driver control period
 void operatorControl()
@@ -67,22 +64,11 @@ void controlDriveTrain()
     setRightDriveTrain(right);
 }
 
-// used by controlClaw()
-static int clawTimer = 0;
-static bool clawOpen = true;
-static bool clawPressed = false;
-static bool lastClawPressed;
-
-void setClawTimer(int clawTime)
+void controlClaw()
 {
-    if (clawTimer <= 0)
-    {
-        clawTimer = clawTime;
-    }
-    else
-    {
-        clawTimer = clawTime - clawTimer;
-    }
+    bool clawOpen = joystickGetDigital(1, 5, JOY_UP);
+    bool clawClose = joystickGetDigital(1, 5, JOY_DOWN);
+    setClaw(speedControl(CLAW_SPEED, clawOpen, clawClose));
 }
 
 void controlClaw()
@@ -119,13 +105,6 @@ void controlClaw()
     {
         clawTimer -= POLL_SPEED;
     }
-}
-
-void controlLift()
-{
-    bool liftUp = joystickGetDigital(1, 6, JOY_UP);
-    bool liftDown = joystickGetDigital(1, 6, JOY_DOWN);
-    setLift(speedControl(LIFT_SPEED, liftUp, liftDown));
 }
 
 void controlMobileGoalLift()
