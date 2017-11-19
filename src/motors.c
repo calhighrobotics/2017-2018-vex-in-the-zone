@@ -2,8 +2,8 @@
 
 #include "main.h"
 
-#define LIFT_SERVO_LOCK (-95)
-#define LIFT_LOCK_TIME 1
+#define LIFT_LOCK (-95)
+#define LIFT_UNLOCK 0
 
 void setLeftDriveTrain(int speed)
 {
@@ -19,10 +19,13 @@ void setRightDriveTrain(int speed)
 
 void setLift(int speed)
 {
-    motorSet(LIFT_SERVO, speed == 0 ? LIFT_SERVO_LOCK : 0);
-    delay(LIFT_LOCK_TIME);
-    motorSet(LIFT_1, -speed);
+    motorSet(LIFT_1, speed);
     motorSet(LIFT_2, speed);
+}
+
+void setLiftLock(bool locked)
+{
+    motorSet(LIFT_SERVO, locked ? LIFT_LOCK : LIFT_UNLOCK);
 }
 
 void setClaw(int speed)

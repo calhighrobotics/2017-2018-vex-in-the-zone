@@ -71,40 +71,28 @@ void controlClaw()
     setClaw(speedControl(CLAW_SPEED, clawOpen, clawClose));
 }
 
-void controlClaw()
+void controlLift()
 {
-    // for the claw, pressing once will open it, pressing once again will
-    //  close it continuously to lock onto the cone, and so on
-    lastClawPressed = clawPressed;
-    clawPressed = joystickGetDigital(1, 8, JOY_RIGHT);
-    if (clawPressed && !lastClawPressed)
+    static bool liftLocked = true;
+    bool liftUp = joystickGetDigital(1, 6, JOY_UP);
+    bool liftDown = joystickGetDigital(1, 6, JOY_DOWN);
+    if (liftUp || liftDown)
     {
-        // open or close the claw based on the claw's current state
-        if (clawOpen)
+        if (liftLocked)
         {
-            // close claw
-            setClaw(CLAW_SPEED);
-            setClawTimer(CLAW_CLOSE_TIME);
+            liftLocked = false;
         }
         else
         {
-            // open claw
-            setClaw(-CLAW_SPEED);
-            setClawTimer(CLAW_OPEN_TIME);
+            setLift(speedControl(LIFT_SPEED, liftUp, liftDown));
         }
-        // switch the claw's state between open and closed
-        clawOpen = !clawOpen;
-    }
-    // timer that keeps track of how long the claw should be opened
-    // once that timer (clawOpenTime) hits 0, the claw is stopped
-    if (clawTimer <= 0)
-    {
-        setClaw(0);
     }
     else
     {
-        clawTimer -= POLL_SPEED;
+        liftLocked = true;
+        setLift(0);
     }
+    setLiftLock(liftLocked);
 }
 
 void controlMobileGoalLift()

@@ -29,7 +29,9 @@ void setLeftDriveTrain(int speed);
 void setRightDriveTrain(int speed);
 // + up, - down
 void setLift(int speed);
-// + closes, - opens
+// true locks, false unlocks
+void setLiftLock(bool locked);
+// + opens, - closes
 void setClaw(int speed);
 // + up, - down
 void setMobileGoalLift(int speed);
