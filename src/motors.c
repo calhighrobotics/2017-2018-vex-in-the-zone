@@ -19,6 +19,10 @@ void setRightDriveTrain(int speed)
 
 void setLift(int speed)
 {
+    if (speed < 0)
+    {
+        speed = speed * 3 / 4;
+    }
     motorSet(LIFT_1, speed);
     motorSet(LIFT_2, speed);
 }
