@@ -3,7 +3,7 @@
 #include "main.h"
 
 #define LIFT_LOCK (-95)
-#define LIFT_UNLOCK 0
+#define LIFT_UNLOCK (-75)
 
 void setLeftDriveTrain(int speed)
 {
