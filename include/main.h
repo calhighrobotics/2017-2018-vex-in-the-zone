@@ -28,13 +28,13 @@ extern "C" {
 void setLeftDriveTrain(int speed);
 void setRightDriveTrain(int speed);
 // + up, - down
-void setLift(int speed);
+void setLift(int direction);
+// + opens, - closes
+void setClaw(int direction);
+// + up, - down
+void setMobileGoalLift(int direction);
 // true locks, false unlocks
 void setLiftLock(bool locked);
-// + opens, - closes
-void setClaw(int speed);
-// + up, - down
-void setMobileGoalLift(int speed);
 
 // these last 4 functions down here are what PROS uses internally to do cool
 //  stuff so it's not recommended to call them within the actual code

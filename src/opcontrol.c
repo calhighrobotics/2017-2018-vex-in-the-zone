@@ -7,10 +7,6 @@
 #define TANK_CONTROLS
 // used in the threshold function to prevent joystick ghosting
 #define THRESHOLD 4
-// speed settings for various button-controled parts
-#define LIFT_SPEED 127
-#define CLAW_SPEED 63
-#define MGL_SPEED 63
 // the time in milliseconds between polls for driver input
 #define POLL_SPEED 20ul
 
@@ -25,8 +21,8 @@ static void controlMobileGoalLift();
 //  joystick ghosting
 static int threshold(int value);
 
-// returns given speed based on whether you want to go forwards or backwards
-static int speedControl(int speed, bool forwards, bool backwards);
+// merges two binary directions (up/down) into a ternary direction (+up/0/-down)
+static int direction(int up, int down);
 
 // main point of execution for the driver control period
 void operatorControl()
@@ -66,16 +62,16 @@ void controlDriveTrain()
 
 void controlClaw()
 {
-    bool clawOpen = joystickGetDigital(1, 5, JOY_UP);
-    bool clawClose = joystickGetDigital(1, 5, JOY_DOWN);
-    setClaw(speedControl(CLAW_SPEED, clawOpen, clawClose));
+    int clawOpen = joystickGetDigital(1, 5, JOY_UP);
+    int clawClose = joystickGetDigital(1, 5, JOY_DOWN);
+    setClaw(direction(clawOpen, clawClose));
 }
 
 void controlLift()
 {
     static bool liftLocked = true;
-    bool liftUp = joystickGetDigital(1, 6, JOY_UP);
-    bool liftDown = joystickGetDigital(1, 6, JOY_DOWN);
+    int liftUp = joystickGetDigital(1, 6, JOY_UP);
+    int liftDown = joystickGetDigital(1, 6, JOY_DOWN);
     if (liftUp || liftDown)
     {
         if (liftLocked)
@@ -84,7 +80,7 @@ void controlLift()
         }
         else
         {
-            setLift(speedControl(LIFT_SPEED, liftUp, liftDown));
+            setLift(direction(liftUp, liftDown));
         }
     }
     else
@@ -97,9 +93,9 @@ void controlLift()
 
 void controlMobileGoalLift()
 {
-    bool mglUp = joystickGetDigital(1, 8, JOY_UP);
-    bool mglDown = joystickGetDigital(1, 8, JOY_DOWN);
-    setMobileGoalLift(speedControl(MGL_SPEED, mglUp, mglDown));
+    int mglUp = joystickGetDigital(1, 8, JOY_UP);
+    int mglDown = joystickGetDigital(1, 8, JOY_DOWN);
+    setMobileGoalLift(direction(mglUp, mglDown));
 }
 
 int threshold(int value)
@@ -107,15 +103,7 @@ int threshold(int value)
     return abs(value) > THRESHOLD ? value : 0;
 }
 
-int speedControl(int speed, bool forwards, bool backwards)
+int direction(int up, int down)
 {
-    if (forwards && !backwards)
-    {
-        return speed;
-    }
-    if (!forwards && backwards)
-    {
-        return -speed;
-    }
-    return 0;
+    return up - down;
 }
