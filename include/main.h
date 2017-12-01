@@ -12,18 +12,6 @@ extern "C" {
 
 #define ROBOT_NAME "Bart Bart"
 
-// ports that are defined for the robot
-#define LIFT_1 1
-#define DRIVE_BL 2
-#define DRIVE_FL 3
-#define DRIVE_FR 4
-#define DRIVE_BR 5
-#define CLAW 6
-#define MGL_LEFT 7
-#define MGL_RIGHT 8
-#define LIFT_SERVO 9
-#define LIFT_2 10
-
 // + forward, - backward
 void setLeftDriveTrain(int speed);
 void setRightDriveTrain(int speed);

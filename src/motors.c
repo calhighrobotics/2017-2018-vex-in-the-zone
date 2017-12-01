@@ -2,6 +2,18 @@
 
 #include "main.h"
 
+// ports that are defined for the robot
+#define LIFT_1 1
+#define DRIVE_BL 2
+#define DRIVE_FL 3
+#define DRIVE_FR 4
+#define DRIVE_BR 5
+#define CLAW 6
+#define SAD_LONELY_UNUSED_PORT 7 // :(
+#define MGL 8
+#define LIFT_SERVO 9
+#define LIFT_2 10
+
 // settings for various button-controled parts
 #define LIFT_UP_SPEED 127
 #define LIFT_DOWN_SPEED (-LIFT_UP_SPEED * 3 / 4)
@@ -44,8 +56,7 @@ void setClaw(int direction)
 void setMobileGoalLift(int direction)
 {
     int speed = speedControl(direction, MGL_SPEED, -MGL_SPEED);
-    motorSet(MGL_LEFT, speed);
-    motorSet(MGL_RIGHT, -speed);
+    motorSet(MGL, speed);
 }
 
 void setLiftLock(bool locked)
