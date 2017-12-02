@@ -7,36 +7,41 @@
 // not in parentheses to take advantage of only doing integer arithmetic
 #define MOTOR_SPEED 5ul/3ul // rot/s
 #define PI 22ul/7ul // overestimated (22/7>PI) because ints always round down
+#define CLAW_TIME 500 // ms
+enum
+{
+    STOP = 0,
+    UP = 1,
+    OPEN = 1,
+    DOWN = -1,
+    CLOSE = -1
+};
 
-// angle=degrees, turnRadius=1/16 inches, -127<=leftPower<=127
+// angles are in degrees, distances are in 1/16 inches
 static void turnCW(unsigned int angle, int turnRadius, int leftPower);
 static void turnCCW(unsigned int angle, int turnRadius, int rightPower);
-// distance=1/16 inches, -127<=power<=127
 static void straight(unsigned long distance, int power);
-static void clawOpen();
-static void clawClose();
+static inline void lift(int direction, unsigned long waitTime);
+static inline void claw(int direction);
 
 // main point of execution for the autonomous period
 void autonomous()
 {
     // start on very left of the 5pt zone
     // pick up the preload and lift it a couple inches off the ground
-    clawClose();
-    setLift(63);
-    taskDelay(100);
-    setLift(0);
+    claw(CLOSE);
+    lift(UP, 100ul);
     // turn 45* clockwise, powered mostly by the right side
         // this should give the robot a clear shot to go straight for the mg
     turnCW(45, BOT_RADIUS, 127);
     // go forward with the preload until some distance away from the mg
-    straight(755, 127);
+    straight(755ul, 127);
     // lift the preload while still going towards the mg
     // once the lift is up, the robot should be right infront of the mg
     // lower the preload onto the mg
-    setLift(-63);
-    taskDelay(100);
-    setLift(0);
+    lift(DOWN, 100ul);
     // back up a bit
+    straight(64, 64);
     // turn 180*
     // back up the same distance to secure the mg on the mgl
     // lift up the mgl a bit
@@ -120,16 +125,16 @@ void straight(unsigned long distance, int power)
     taskDelay(waitTime - (after - before));
 }
 
-void clawOpen()
+void lift(int direction, unsigned long waitTime)
 {
-    setClaw(127);
-    taskDelay(250);
-    setClaw(0);
+    setLift(direction);
+    taskDelay(waitTime);
+    setLift(0);
 }
 
-void clawClose()
+void claw(int direction)
 {
-    setClaw(-127);
-    taskDelay(250);
+    setClaw(direction);
+    taskDelay(CLAW_TIME);
     setClaw(0);
 }
