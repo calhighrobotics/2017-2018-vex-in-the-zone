@@ -3,7 +3,7 @@
 #include "main.h"
 
 // ports that are defined for the robot
-#define LIFT_SPOOL 1
+#define LIFT_RIGHT 1
 #define DRIVE_BL 2
 #define DRIVE_FL 3
 #define DRIVE_FR 4
@@ -12,11 +12,13 @@
 #define LIFT_LEFT 7
 #define MGL 8
 #define LIFT_SERVO 9
-#define LIFT_RIGHT 10
+#define LIFT_SPOOL 10
 
 // settings for various button-controled parts
 #define LIFT_UP_SPEED 127
-#define LIFT_DOWN_SPEED (-LIFT_UP_SPEED / 2)
+#define LIFT_DOWN_SPEED (-127)
+#define LIFT_SPOOL_UP_SPEED 127
+#define LIFT_SPOOL_DOWN_SPEED (-32)
 #define CLAW_SPEED 63
 #define MGL_SPEED 63
 #define LIFT_LOCK (-95)
@@ -42,8 +44,10 @@ void setRightDriveTrain(int speed)
 
 void setLift(direction_t direction)
 {
+    int spoolSpeed = speedControl(direction, LIFT_SPOOL_UP_SPEED,
+        LIFT_SPOOL_DOWN_SPEED);
     int speed = speedControl(direction, LIFT_UP_SPEED, LIFT_DOWN_SPEED);
-    motorSet(LIFT_SPOOL, speed);
+    motorSet(LIFT_SPOOL, spoolSpeed);
     motorSet(LIFT_LEFT, -speed);
     motorSet(LIFT_RIGHT, speed);
 }
