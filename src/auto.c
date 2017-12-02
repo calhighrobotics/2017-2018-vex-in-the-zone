@@ -13,6 +13,7 @@
 static void turnCW(unsigned int angle, int turnRadius, int leftPower);
 static void turnCCW(unsigned int angle, int turnRadius, int rightPower);
 static void straight(unsigned long distance, int power);
+static void stop();
 static inline void lift(direction_t direction, unsigned long waitTime);
 static inline void claw(direction_t direction);
 
@@ -117,16 +118,22 @@ void straight(unsigned long distance, int power)
     taskDelay(waitTime - (after - before));
 }
 
+void stop()
+{
+    setLeftDriveTrain(0);
+    setRightDriveTrain(0);
+}
+
 void lift(direction_t direction, unsigned long waitTime)
 {
     setLift(direction);
     taskDelay(waitTime);
-    setLift(0);
+    setLift(STOP);
 }
 
 void claw(direction_t direction)
 {
     setClaw(direction);
     taskDelay(CLAW_TIME);
-    setClaw(0);
+    setClaw(STOP);
 }
