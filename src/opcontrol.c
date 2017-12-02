@@ -5,6 +5,8 @@
 
 // uncomment this line to enable arcade controls
 #define TANK_CONTROLS
+// uncomment this line to disable autonomous button
+#define AUTON_DEBUG
 // used in the threshold function to prevent joystick ghosting
 #define THRESHOLD 4
 // the time in milliseconds between polls for driver input
@@ -16,6 +18,9 @@ static void controlDriveTrain();
 static void controlClaw();
 static void controlLift();
 static void controlMobileGoalLift();
+#ifdef AUTON_DEBUG
+static void controlAutonomous();
+#endif // AUTON_DEBUG
 
 // returns what was given if the value exceeds the threshold, else 0 to prevent
 //  joystick ghosting
@@ -36,6 +41,9 @@ void operatorControl()
         controlClaw();
         controlLift();
         controlMobileGoalLift();
+#ifdef AUTON_DEBUG
+        controlAutonomous();
+#endif // AUTON_DEBUG
         // wait a bit before receiving input again
         taskDelayUntil(&time, POLL_SPEED);
     }
@@ -97,6 +105,16 @@ void controlMobileGoalLift()
     int mglDown = joystickGetDigital(1, 8, JOY_DOWN);
     setMobileGoalLift(direction(mglUp, mglDown));
 }
+
+#ifdef AUTON_DEBUG
+void controlAutonomous()
+{
+    if (joystickGetDigital(1, 7, JOY_LEFT))
+    {
+        autonomous();
+    }
+}
+#endif // AUTON_DEBUG
 
 int threshold(int value)
 {
