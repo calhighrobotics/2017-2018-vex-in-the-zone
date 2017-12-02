@@ -7,7 +7,7 @@
 // not in parentheses to take advantage of only doing integer arithmetic
 #define MOTOR_SPEED 5ul/3ul // rot/s
 #define PI 22ul/7ul // overestimated (22/7>PI) because ints always round down
-#define CLAW_TIME 500 // ms
+#define CLAW_TIME 100ul // ms
 
 // angles are in degrees, distances are in 1/16 inches
 static void turnCW(unsigned int angle, int turnRadius, int leftPower);
