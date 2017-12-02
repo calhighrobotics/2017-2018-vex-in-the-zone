@@ -27,7 +27,7 @@ static void controlAutonomous();
 static int threshold(int value);
 
 // merges two binary directions (up/down) into a ternary direction (+up/0/-down)
-static int direction(int up, int down);
+static direction_t direction(bool up, bool down);
 
 // main point of execution for the driver control period
 void operatorControl()
@@ -70,16 +70,16 @@ void controlDriveTrain()
 
 void controlClaw()
 {
-    int clawOpen = joystickGetDigital(1, 5, JOY_UP);
-    int clawClose = joystickGetDigital(1, 5, JOY_DOWN);
+    bool clawOpen = joystickGetDigital(1, 5, JOY_UP);
+    bool clawClose = joystickGetDigital(1, 5, JOY_DOWN);
     setClaw(direction(clawOpen, clawClose));
 }
 
 void controlLift()
 {
     static bool liftLocked = true;
-    int liftUp = joystickGetDigital(1, 6, JOY_UP);
-    int liftDown = joystickGetDigital(1, 6, JOY_DOWN);
+    bool liftUp = joystickGetDigital(1, 6, JOY_UP);
+    bool liftDown = joystickGetDigital(1, 6, JOY_DOWN);
     if (liftUp || liftDown)
     {
         if (liftLocked)
@@ -94,15 +94,15 @@ void controlLift()
     else
     {
         liftLocked = true;
-        setLift(0);
+        setLift(STOP);
     }
     setLiftLock(liftLocked);
 }
 
 void controlMobileGoalLift()
 {
-    int mglUp = joystickGetDigital(1, 8, JOY_UP);
-    int mglDown = joystickGetDigital(1, 8, JOY_DOWN);
+    bool mglUp = joystickGetDigital(1, 8, JOY_UP);
+    bool mglDown = joystickGetDigital(1, 8, JOY_DOWN);
     setMobileGoalLift(direction(mglUp, mglDown));
 }
 
@@ -121,7 +121,7 @@ int threshold(int value)
     return abs(value) > THRESHOLD ? value : 0;
 }
 
-int direction(int up, int down)
+direction_t direction(bool up, bool down)
 {
-    return up - down;
+    return (direction_t) (up - down);
 }

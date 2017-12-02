@@ -12,15 +12,25 @@ extern "C" {
 
 #define ROBOT_NAME "Bart Bart"
 
+typedef enum
+{
+    STOP = 0,
+    UP = 1,
+    OPEN = 1,
+    DOWN = -1,
+    CLOSE = -1
+}
+direction_t;
+
 // + forward, - backward
 void setLeftDriveTrain(int speed);
 void setRightDriveTrain(int speed);
 // + up, - down
-void setLift(int direction);
+void setLift(direction_t direction);
 // + opens, - closes
-void setClaw(int direction);
+void setClaw(direction_t direction);
 // + up, - down
-void setMobileGoalLift(int direction);
+void setMobileGoalLift(direction_t direction);
 // true locks, false unlocks
 void setLiftLock(bool locked);
 

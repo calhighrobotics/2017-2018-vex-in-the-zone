@@ -23,7 +23,7 @@
 #define LIFT_UNLOCK (-75)
 
 // translates the ternary direction (+up/0/-down) to an actual speed
-static inline int speedControl(int direction, int up, int down)
+static int speedControl(direction_t direction, int up, int down)
 {
     return (direction > 0) ? up : (direction < 0) ? down : 0;
 }
@@ -40,7 +40,7 @@ void setRightDriveTrain(int speed)
     motorSet(DRIVE_BR, -speed);
 }
 
-void setLift(int direction)
+void setLift(direction_t direction)
 {
     int speed = speedControl(direction, LIFT_UP_SPEED, LIFT_DOWN_SPEED);
     motorSet(LIFT_SPOOL, speed);
@@ -48,13 +48,13 @@ void setLift(int direction)
     motorSet(LIFT_RIGHT, speed);
 }
 
-void setClaw(int direction)
+void setClaw(direction_t direction)
 {
     int speed = speedControl(direction, CLAW_SPEED, -CLAW_SPEED);
     motorSet(CLAW, speed);
 }
 
-void setMobileGoalLift(int direction)
+void setMobileGoalLift(direction_t direction)
 {
     int speed = speedControl(direction, MGL_SPEED, -MGL_SPEED);
     motorSet(MGL, speed);

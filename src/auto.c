@@ -8,21 +8,13 @@
 #define MOTOR_SPEED 5ul/3ul // rot/s
 #define PI 22ul/7ul // overestimated (22/7>PI) because ints always round down
 #define CLAW_TIME 500 // ms
-enum
-{
-    STOP = 0,
-    UP = 1,
-    OPEN = 1,
-    DOWN = -1,
-    CLOSE = -1
-};
 
 // angles are in degrees, distances are in 1/16 inches
 static void turnCW(unsigned int angle, int turnRadius, int leftPower);
 static void turnCCW(unsigned int angle, int turnRadius, int rightPower);
 static void straight(unsigned long distance, int power);
-static inline void lift(int direction, unsigned long waitTime);
-static inline void claw(int direction);
+static inline void lift(direction_t direction, unsigned long waitTime);
+static inline void claw(direction_t direction);
 
 // main point of execution for the autonomous period
 void autonomous()
@@ -125,14 +117,14 @@ void straight(unsigned long distance, int power)
     taskDelay(waitTime - (after - before));
 }
 
-void lift(int direction, unsigned long waitTime)
+void lift(direction_t direction, unsigned long waitTime)
 {
     setLift(direction);
     taskDelay(waitTime);
     setLift(0);
 }
 
-void claw(int direction)
+void claw(direction_t direction)
 {
     setClaw(direction);
     taskDelay(CLAW_TIME);
