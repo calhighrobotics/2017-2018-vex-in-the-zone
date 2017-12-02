@@ -47,9 +47,10 @@ void stationaryGoal()
     // score the preload
     lift(DOWN, 1100ul);
     claw(OPEN);
+    straight(32ul, -127);
     lift(DOWN, 2400ul);
     // back up a bit
-    straight(112ul, -127);
+    straight(95ul, -127);
     stop();
 }
 
