@@ -16,7 +16,7 @@
 
 // settings for various button-controled parts
 #define LIFT_UP_SPEED 127
-#define LIFT_DOWN_SPEED (-LIFT_UP_SPEED * 3 / 4)
+#define LIFT_DOWN_SPEED (-LIFT_UP_SPEED / 2)
 #define CLAW_SPEED 63
 #define MGL_SPEED 63
 #define LIFT_LOCK (-95)
