@@ -2,49 +2,55 @@
 
 #include "main.h"
 
-#define WHEEL_RADIUS 32ul // 1/16 in
-#define BOT_RADIUS 120ul // 1/16 in
+// angles are in degrees, distances are in 1/16 inches
+#define WHEEL_RADIUS 32ul
+#define BOT_RADIUS 120ul
 // not in parentheses to take advantage of only doing integer arithmetic
 #define MOTOR_SPEED 5ul/3ul // rot/s
 #define PI 22ul/7ul // overestimated (22/7>PI) because ints always round down
 #define CLAW_TIME 100ul // ms
 
-// angles are in degrees, distances are in 1/16 inches
+// autonomous plans
+static void forwardAndBack();
+static void stationaryGoal();
+
 static void turnCW(unsigned int angle, int turnRadius, int leftPower);
 static void turnCCW(unsigned int angle, int turnRadius, int rightPower);
 static void straight(unsigned long distance, int power);
 static void stop();
-static inline void lift(direction_t direction, unsigned long waitTime);
-static inline void claw(direction_t direction);
+static void lift(direction_t direction, unsigned long waitTime);
+static void claw(direction_t direction);
 
 // main point of execution for the autonomous period
 void autonomous()
 {
-    // start on very left of the 5pt zone
-    // pick up the preload and lift it a couple inches off the ground
+    //forwardAndBack();
+    stationaryGoal();
+}
+
+void forwardAndBack()
+{
+    straight(100ul, 95);
+    straight(100ul, -95);
+    stop();
+}
+
+void stationaryGoal()
+{
+    // start on the middle
+    // pick up the cone
     claw(CLOSE);
-    lift(UP, 100ul);
-    // turn 45* clockwise, powered mostly by the right side
-        // this should give the robot a clear shot to go straight for the mg
-    turnCW(45, BOT_RADIUS, 127);
-    // go forward with the preload until some distance away from the mg
-    straight(755ul, 127);
-    // lift the preload while still going towards the mg
-    // once the lift is up, the robot should be right infront of the mg
-    // lower the preload onto the mg
-    lift(DOWN, 100ul);
+    lift(UP, 3500ul);
+    // go up to the stationary goal
+    straight(128ul, 127);
+    stop();
+    // score the preload
+    lift(DOWN, 1100ul);
+    claw(OPEN);
+    lift(DOWN, 2400ul);
     // back up a bit
-    straight(64, 64);
-    // turn 180*
-    // back up the same distance to secure the mg on the mgl
-    // lift up the mgl a bit
-    // go forward until the center of the robot is at the 5pt zone line
-    // turn 135* clockwise
-    // go backward 1 tile diagonal along the 5pt zone line until at the middle
-    // turn 90* clockwise
-    // go backward until the back wheel is over the 20pt zone bump
-    // lower the mgl to score an easy 20 points
-    // go forward the same distance and stop
+    straight(112ul, -127);
+    stop();
 }
 
 void turnCW(unsigned int angle, int turnRadius, int leftPower)
