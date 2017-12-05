@@ -3,16 +3,16 @@
 #include "main.h"
 
 // ports that are defined for the robot
-#define LIFT_RIGHT 1
+#define LIFT_SPOOL_LEFT 1
 #define DRIVE_BL 2
 #define DRIVE_FL 3
 #define DRIVE_FR 4
 #define DRIVE_BR 5
 #define CLAW 6
-#define LIFT_LEFT 7
+#define LIFT_TOWER 7
 #define MGL 8
-#define LIFT_SERVO 9
-#define LIFT_SPOOL 10
+#define LIFT_LOCK 9
+#define LIFT_SPOOL_RIGHT 10
 
 // settings for various button-controled parts
 #define LIFT_UP_SPEED 127
@@ -21,8 +21,8 @@
 #define LIFT_SPOOL_DOWN_SPEED (-32)
 #define CLAW_SPEED 63
 #define MGL_SPEED 63
-#define LIFT_LOCK (-95)
-#define LIFT_UNLOCK (-75)
+#define LIFT_LOCKED (-95)
+#define LIFT_UNLOCKED (-75)
 
 // translates the ternary direction (+up/0/-down) to an actual speed
 static int speedControl(direction_t direction, int up, int down)
@@ -46,10 +46,10 @@ void setLift(direction_t direction)
 {
     int spoolSpeed = speedControl(direction, LIFT_SPOOL_UP_SPEED,
         LIFT_SPOOL_DOWN_SPEED);
-    int speed = speedControl(direction, LIFT_UP_SPEED, LIFT_DOWN_SPEED);
-    motorSet(LIFT_SPOOL, spoolSpeed);
-    motorSet(LIFT_LEFT, -speed);
-    motorSet(LIFT_RIGHT, speed);
+    int towerSpeed = speedControl(direction, LIFT_UP_SPEED, LIFT_DOWN_SPEED);
+    motorSet(LIFT_SPOOL_LEFT, spoolSpeed);
+    motorSet(LIFT_SPOOL_RIGHT, -spoolSpeed);
+    motorSet(LIFT_TOWER, towerSpeed);
 }
 
 void setClaw(direction_t direction)
@@ -66,5 +66,5 @@ void setMobileGoalLift(direction_t direction)
 
 void setLiftLock(bool locked)
 {
-    motorSet(LIFT_SERVO, locked ? LIFT_LOCK : LIFT_UNLOCK);
+    motorSet(LIFT_LOCK, locked ? LIFT_LOCKED : LIFT_UNLOCKED);
 }
