@@ -49,7 +49,6 @@ void autonomous()
 
 void turnCW(unsigned int angle, int turnRadius, int leftPower)
 {
-    unsigned long before = millis();
     /*
      * T=time to make a full circle
      * leftSpeed*T = 2*pi*(turnRadius+BOT_RADIUS)
@@ -73,7 +72,7 @@ void turnCW(unsigned int angle, int turnRadius, int leftPower)
      * = (angle/360)*(2*PI*(turnRadius+BOT_RADIUS))/(leftSpeed)
      * = (angle*PI*(turnRadius+BOT_RADIUS))/(180*leftSpeed)
      * = (angle*PI*(turnRadius+BOT_RADIUS))/
-     *       (180*leftPower*(2*PI*WHEEL_RADIUS*MOTOR_SPEED/(1 rotation)))
+     *       (180*leftPower/127*(2*PI*WHEEL_RADIUS*MOTOR_SPEED/(1 rotation)))
      * = (angle*127*(turnRadius+BOT_RADIUS))/
      *       (leftPower*360*WHEEL_RADIUS*MOTOR_SPEED) (seconds)
      * = (angle*(turnRadius+BOT_RADIUS)*3175)/
@@ -82,40 +81,34 @@ void turnCW(unsigned int angle, int turnRadius, int leftPower)
      */
     unsigned long waitTime = ((turnRadius + BOT_RADIUS) * 3175ul * angle) /
         (WHEEL_RADIUS * MOTOR_SPEED * 9ul * leftPower);
-    unsigned long after = millis();
-    taskDelay(waitTime - (after - before));
+    taskDelay(waitTime);
 }
 
 void turnCCW(unsigned int angle, int turnRadius, int rightPower)
 {
-    unsigned long before = millis();
     int leftPower = (((int) turnRadius - (int) BOT_RADIUS) * rightPower) /
         ((int) turnRadius + (int) BOT_RADIUS);
     setLeftDriveTrain(leftPower);
     setRightDriveTrain(rightPower);
     unsigned long waitTime = ((turnRadius + BOT_RADIUS) * 3175ul * angle) /
         (WHEEL_RADIUS * MOTOR_SPEED * 9ul * rightPower);
-    unsigned long after = millis();
-    taskDelay(waitTime - (after - before));
+    taskDelay(waitTime);
 }
 
 void straight(unsigned long distance, int power)
 {
-    unsigned long before = millis();
     setLeftDriveTrain(power);
     setRightDriveTrain(power);
     /*
      * speed = (power/127)*(2*PI*WHEEL_RADIUS*MOTOR_SPEED/(1 rotation))
      * = (power*2*PI*WHEEL_RADIUS*MOTOR_SPEED)/127
-     * waitTime = speed/distance
-     * = (2*PI*WHEEL_RADIUS*MOTOR_SPEED*power)/(127*distance) (seconds)
-     * = (2000*PI*WHEEL_RADIUS*MOTOR_SPEED*power)/(127*distance) (milliseconds)
+     * waitTime = distance/speed
+     * = (127*distance)/(2*PI*WHEEL_RADIUS*MOTOR_SPEED*power) s
+     * = (127000*distance)/(2*PI*WHEEL_RADIUS*MOTOR_SPEED*power) ms
      */
-    unsigned long waitTime = (2000ul * WHEEL_RADIUS * MOTOR_SPEED * PI *
-            (unsigned long) abs(power)) /
-        (127ul * distance);
-    unsigned long after = millis();
-    taskDelay(waitTime - (after - before));
+    unsigned long waitTime = (127000ul * distance) /
+        (2ul * WHEEL_RADIUS * MOTOR_SPEED * PI * (unsigned long) abs(power));
+    taskDelay(waitTime);
 }
 
 void stop()
