@@ -47,9 +47,9 @@ void setLift(direction_t direction)
     int spoolSpeed = speedControl(direction, LIFT_SPOOL_UP_SPEED,
         LIFT_SPOOL_DOWN_SPEED);
     int towerSpeed = speedControl(direction, LIFT_UP_SPEED, LIFT_DOWN_SPEED);
-    motorSet(LIFT_SPOOL_LEFT, spoolSpeed);
-    motorSet(LIFT_SPOOL_RIGHT, -spoolSpeed);
-    motorSet(LIFT_TOWER, towerSpeed);
+    motorSet(LIFT_SPOOL_LEFT, -spoolSpeed);
+    motorSet(LIFT_SPOOL_RIGHT, spoolSpeed);
+    motorSet(LIFT_TOWER, -towerSpeed);
 }
 
 void setClaw(direction_t direction)
