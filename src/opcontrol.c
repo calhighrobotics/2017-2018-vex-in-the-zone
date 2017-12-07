@@ -70,9 +70,9 @@ void controlDriveTrain()
 
 void controlClaw()
 {
-    bool clawOpen = joystickGetDigital(1, 5, JOY_UP);
-    bool clawClose = joystickGetDigital(1, 5, JOY_DOWN);
-    setClaw(direction(clawOpen, clawClose));
+    bool clawClose = joystickGetDigital(1, 5, JOY_UP);
+    bool clawOpen = joystickGetDigital(1, 5, JOY_DOWN);
+    setClaw(direction(clawClose, clawOpen));
 }
 
 void controlLift()

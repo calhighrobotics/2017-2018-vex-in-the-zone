@@ -16,9 +16,9 @@ typedef enum
 {
     STOP = 0,
     UP = 1,
-    OPEN = 1,
+    CLOSE = 1,
     DOWN = -1,
-    CLOSE = -1
+    OPEN = -1
 }
 direction_t;
 
@@ -27,7 +27,7 @@ void setLeftDriveTrain(int speed);
 void setRightDriveTrain(int speed);
 // + up, - down
 void setLift(direction_t direction);
-// + opens, - closes
+// + closes, + opens
 void setClaw(direction_t direction);
 // + up, - down
 void setMobileGoalLift(direction_t direction);

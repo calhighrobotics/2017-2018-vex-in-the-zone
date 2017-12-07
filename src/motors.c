@@ -55,7 +55,7 @@ void setLift(direction_t direction)
 void setClaw(direction_t direction)
 {
     int speed = speedControl(direction, CLAW_SPEED, -CLAW_SPEED);
-    motorSet(CLAW, speed);
+    motorSet(CLAW, -speed);
 }
 
 void setMobileGoalLift(direction_t direction)
