@@ -9,8 +9,8 @@
 #define DRIVE_FR 4
 #define DRIVE_BR 5
 #define CLAW 6
-#define LIFT_TOWER 7
-#define MGL 8
+#define MGL 7
+#define LIFT_TOWER 8
 #define LIFT_LOCK 9
 #define LIFT_SPOOL_RIGHT 10
 
@@ -49,7 +49,7 @@ void setLift(direction_t direction)
     int towerSpeed = speedControl(direction, LIFT_UP_SPEED, LIFT_DOWN_SPEED);
     motorSet(LIFT_SPOOL_LEFT, -spoolSpeed);
     motorSet(LIFT_SPOOL_RIGHT, spoolSpeed);
-    motorSet(LIFT_TOWER, -towerSpeed);
+    motorSet(LIFT_TOWER, towerSpeed);
 }
 
 void setClaw(direction_t direction)
