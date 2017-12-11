@@ -10,7 +10,7 @@
 // used in the threshold function to prevent joystick ghosting
 #define THRESHOLD 4
 // the time in milliseconds between polls for driver input
-#define POLL_SPEED 20ul
+#define POLL_SPEED 15ul
 
 // these functions get and respond to driver input for every different part
 // operatorControl() should be calling these functions in the order below
