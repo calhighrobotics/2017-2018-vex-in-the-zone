@@ -18,7 +18,7 @@
 #define LIFT_UP_SPEED 127
 #define LIFT_DOWN_SPEED (-127)
 #define LIFT_SPOOL_UP_SPEED 127
-#define LIFT_SPOOL_DOWN_SPEED (-32)
+#define LIFT_SPOOL_DOWN_SPEED (-24)
 #define CLAW_SPEED 63
 #define MGL_SPEED 63
 #define LIFT_LOCKED (-95)
