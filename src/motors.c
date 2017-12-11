@@ -6,12 +6,12 @@
 #define LIFT_SPOOL_LEFT 1
 #define DRIVE_BL 2
 #define DRIVE_FL 3
-#define DRIVE_FR 4
-#define DRIVE_BR 5
+#define LIFT_TOWER 4
+#define LIFT_LOCK 5
 #define CLAW 6
 #define MGL 7
-#define LIFT_TOWER 8
-#define LIFT_LOCK 9
+#define DRIVE_FR 8
+#define DRIVE_BR 9
 #define LIFT_SPOOL_RIGHT 10
 
 // settings for various button-controled parts
