@@ -5,7 +5,7 @@
 
 // uncomment this line to enable arcade controls
 #define TANK_CONTROLS
-// uncomment this line to disable autonomous button
+// uncomment this line to enable autonomous button
 //#define AUTON_DEBUG
 // used in the threshold function to prevent joystick ghosting
 #define THRESHOLD 4
