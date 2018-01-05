@@ -10,7 +10,7 @@
 extern "C" {
 #endif
 
-#define ROBOT_NAME "Bart Bart"
+#define ROBOT_NAME "Robart"
 
 typedef enum
 {
