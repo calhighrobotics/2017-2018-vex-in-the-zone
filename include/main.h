@@ -7,12 +7,13 @@
 #include <API.h>
 
 #ifdef __cplusplus
-extern "C" {
+extern "C"
+{
 #endif
 
 #define ROBOT_NAME "Robart"
 
-typedef enum
+typedef enum Direction
 {
     STOP = 0,
     UP = 1,
@@ -21,6 +22,23 @@ typedef enum
     OPEN = -1
 }
 direction_t;
+
+typedef enum AutonID
+{
+    AUTONID_MIN,
+    FORWARD_BACKWARD = AUTONID_MIN,
+    SCORE_MG_WITH_CONE,
+    SCORE_STATIONARY,
+    AUTONID_MAX = SCORE_STATIONARY,
+    AUTONID_COUNT
+}
+autonid_t;
+
+// determines what autonomous program to run
+extern autonid_t autonid;
+
+// starts up the LCD to do cool stuff on its own task
+void lcdMain();
 
 // + forward, - backward
 void setLeftDriveTrain(int speed);

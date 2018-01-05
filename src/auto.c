@@ -11,9 +11,9 @@
 #define CLAW_TIME 150ul // ms
 
 // autonomous plans
-static void forwardAndBack();
-static void stationaryGoal();
-static void mobileGoal();
+static void forwardBackward();
+static void scoreMgWithCone();
+static void scoreStationary();
 
 // dt functions require a stop() at the end to allow chaining
 static void turnCW(unsigned int angle, int turnRadius, int leftPower);
@@ -28,38 +28,30 @@ static void mgl(direction_t direction, unsigned long waitTime);
 // main point of execution for the autonomous period
 void autonomous()
 {
-    //forwardAndBack();
-    stationaryGoal();
-    //mobileGoal();
+    switch (autonid)
+    {
+    case FORWARD_BACKWARD:
+        forwardBackward();
+        break;
+    case SCORE_MG_WITH_CONE:
+        scoreMgWithCone();
+        break;
+    case SCORE_STATIONARY:
+        scoreStationary();
+        break;
+    default:
+        ; // should never happen
+    }
 }
 
-void forwardAndBack()
+void forwardBackward()
 {
     straight(100ul, 95);
     straight(100ul, -95);
     stop();
 }
 
-void stationaryGoal()
-{
-    stop();
-    // start on the middle
-    // pick up the cone
-    claw(CLOSE);
-    lift(UP, 4200ul);
-    // go up to the stationary goal
-    straight(96ul, 64);
-    stop();
-    // score the preload
-    lift(DOWN, 950ul);
-    claw(OPEN);
-    // back up a bit to fully lower the lift
-    straight(64ul, -64);
-    stop();
-    lift(DOWN, 2800ul);
-}
-
-void mobileGoal()
+void scoreMgWithCone()
 {
     // pick up the cone
     claw(CLOSE);
@@ -90,6 +82,25 @@ void mobileGoal()
     // get out of the bumps to give the driver some extra time
     straight(450ul, 127);
     stop();
+}
+
+void scoreStationary()
+{
+    stop();
+    // start on the middle
+    // pick up the cone
+    claw(CLOSE);
+    lift(UP, 4200ul);
+    // go up to the stationary goal
+    straight(96ul, 64);
+    stop();
+    // score the preload
+    lift(DOWN, 950ul);
+    claw(OPEN);
+    // back up a bit to fully lower the lift
+    straight(64ul, -64);
+    stop();
+    lift(DOWN, 2800ul);
 }
 
 void turnCW(unsigned int angle, int turnRadius, int leftPower)

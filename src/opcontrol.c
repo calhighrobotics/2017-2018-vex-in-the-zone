@@ -43,7 +43,7 @@ void operatorControl()
         controlMobileGoalLift();
 #ifdef AUTON_DEBUG
         controlAutonomous();
-#endif // AUTON_DEBUG
+#endif
         // wait a bit before receiving input again
         taskDelayUntil(&time, POLL_SPEED);
     }

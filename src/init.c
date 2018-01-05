@@ -12,4 +12,5 @@ void initializeIO()
 //  and other stuff
 void initialize()
 {
+    lcdMain();
 }
