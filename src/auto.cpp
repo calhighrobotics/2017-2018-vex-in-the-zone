@@ -1,6 +1,6 @@
 // contains code for the autonomous period and anything else associated with it
 
-#include "main.h"
+#include "main.hpp"
 
 // angles are in degrees, distances are in 1/16 inches
 #define WHEEL_RADIUS 32ul
@@ -21,9 +21,9 @@ static void turnCCW(unsigned int angle, int turnRadius, int rightPower);
 static void straight(unsigned long distance, int power);
 static void stop();
 // other stuff
-static void lift(direction_t direction, unsigned long waitTime);
-static void claw(direction_t direction);
-static void mgl(direction_t direction, unsigned long waitTime);
+static void lift(Direction direction, unsigned long waitTime);
+static void claw(Direction direction);
+static void mgl(Direction direction, unsigned long waitTime);
 
 // main point of execution for the autonomous period
 void autonomous()
@@ -39,15 +39,13 @@ void autonomous()
     case SCORE_STATIONARY:
         scoreStationary();
         break;
-    default:
-        ; // should never happen
     }
 }
 
 void forwardBackward()
 {
-    straight(100ul, 95);
-    straight(100ul, -95);
+    straight(100, 95);
+    straight(100, -95);
     stop();
 }
 
@@ -55,32 +53,32 @@ void scoreMgWithCone()
 {
     // pick up the cone
     claw(CLOSE);
-    lift(UP, 1200ul);
+    lift(UP, 1200);
     // drive over to the mobile goal
-    straight(950ul, 127);
+    straight(950 , 127);
     stop();
     // put the cone on the mobile goal
-    lift(DOWN, 1200ul);
+    lift(DOWN, 1200);
     claw(OPEN);
-    straight(32ul, -64);
+    straight(32, -64);
     // do a 180
     turnCW(180, 0, 127);
     // pick up the mobile goal
-    straight(35ul, -64);
+    straight(35, -64);
     stop();
-    mgl(UP, 1300ul);
+    mgl(UP, 1300);
     // drive over to the white tape
-    straight(950ul, -127);
+    straight(950, -127);
     // align with the 20pt zone
     turnCCW(45, 0, 64);
-    straight(500ul, 127);
+    straight(500, 127);
     turnCW(90, 0, 64);
     // score the mobile goal into the 20pt zone
-    straight(530ul, -127);
+    straight(530, -127);
     stop();
-    mgl(DOWN, 1000ul);
+    mgl(DOWN, 1000);
     // get out of the bumps to give the driver some extra time
-    straight(450ul, 127);
+    straight(450, 127);
     stop();
 }
 
@@ -90,17 +88,17 @@ void scoreStationary()
     // start on the middle
     // pick up the cone
     claw(CLOSE);
-    lift(UP, 4200ul);
+    lift(UP, 4200);
     // go up to the stationary goal
-    straight(96ul, 64);
+    straight(96, 64);
     stop();
     // score the preload
-    lift(DOWN, 950ul);
+    lift(DOWN, 950);
     claw(OPEN);
     // back up a bit to fully lower the lift
-    straight(64ul, -64);
+    straight(64, -64);
     stop();
-    lift(DOWN, 2800ul);
+    lift(DOWN, 2800);
 }
 
 void turnCW(unsigned int angle, int turnRadius, int leftPower)
@@ -173,7 +171,7 @@ void stop()
     setRightDriveTrain(0);
 }
 
-void lift(direction_t direction, unsigned long waitTime)
+void lift(Direction direction, unsigned long waitTime)
 {
     setLiftLock(false);
     setLift(direction);
@@ -182,14 +180,14 @@ void lift(direction_t direction, unsigned long waitTime)
     setLiftLock(true);
 }
 
-void claw(direction_t direction)
+void claw(Direction direction)
 {
     setClaw(direction);
     taskDelay(CLAW_TIME);
     setClaw(STOP);
 }
 
-void mgl(direction_t direction, unsigned long waitTime)
+void mgl(Direction direction, unsigned long waitTime)
 {
     setMobileGoalLift(direction);
     taskDelay(waitTime);

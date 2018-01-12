@@ -1,60 +1,53 @@
-// declares the functions, constants, etc. that should exist for all c files to
-//  use or at least know about
+// declares the functions, constants, etc. that should exist for all cpp files
+//  to use or at least know about
 
-#ifndef MAIN_H
-#define MAIN_H
+#ifndef MAIN_HPP
+#define MAIN_HPP
 
 #include <API.h>
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif
-
 #define ROBOT_NAME "Robart"
 
-typedef enum Direction
+enum Direction
 {
     STOP = 0,
     UP = 1,
     CLOSE = 1,
     DOWN = -1,
     OPEN = -1
-}
-direction_t;
+};
 
-typedef enum AutonID
+enum AutonID
 {
     AUTONID_MIN,
     FORWARD_BACKWARD = AUTONID_MIN,
     SCORE_MG_WITH_CONE,
     SCORE_STATIONARY,
-    AUTONID_MAX = SCORE_STATIONARY,
-    AUTONID_COUNT
-}
-autonid_t;
+    AUTONID_MAX = SCORE_STATIONARY
+};
 
 // determines what autonomous program to run
-extern autonid_t autonid;
+extern AutonID autonid;
 
-// starts up the LCD to do cool stuff on its own task
-void lcdMain();
+// starts up the LCD to do cool stuff, put on its own task by init.cpp
+void lcdMain(void*);
 
 // + forward, - backward
 void setLeftDriveTrain(int speed);
 void setRightDriveTrain(int speed);
 // + up, - down
-void setLift(direction_t direction);
-// + closes, + opens
-void setClaw(direction_t direction);
+void setLift(Direction direction);
+// + closes, - opens
+void setClaw(Direction direction);
 // + up, - down
-void setMobileGoalLift(direction_t direction);
+void setMobileGoalLift(Direction direction);
 // true locks, false unlocks
 void setLiftLock(bool locked);
 
 // these last 4 functions down here are what PROS uses internally to do cool
 //  stuff so it's not recommended to call them within the actual code
-
+extern "C"
+{
 // main point of execution for the autonomous period
 void autonomous();
 
@@ -68,8 +61,6 @@ void initialize();
 
 // main point of execution for the driver control period
 void operatorControl();
+} // end extern "C"
 
-#ifdef __cplusplus
-}
-#endif
-#endif // MAIN_H
+#endif // MAIN_HPP

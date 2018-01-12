@@ -1,0 +1,21 @@
+// contains initialization of globals and stuff
+
+#include "main.hpp"
+
+// declared in main.hpp
+AutonID autonid = SCORE_STATIONARY;
+
+// pre-initialization code, mostly just setting default pin modes and port
+//  states and stuff
+void initializeIO()
+{
+}
+
+// initialization code, usually for initializing sensors, LCDs, globals, IMEs,
+//  and other stuff
+void initialize()
+{
+    // do all the LCD stuff on a separate thread
+    taskCreate(lcdMain, TASK_DEFAULT_STACK_SIZE, NULL,
+        TASK_PRIORITY_DEFAULT - 1);
+}

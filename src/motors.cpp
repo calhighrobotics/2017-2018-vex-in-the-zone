@@ -1,6 +1,6 @@
 // defines the functions that control various parts of the robot
 
-#include "main.h"
+#include "main.hpp"
 
 // ports that are defined for the robot
 #define LIFT_SPOOL_LEFT 1
@@ -25,7 +25,7 @@
 #define LIFT_UNLOCKED (-75)
 
 // translates the ternary direction (+up/0/-down) to an actual speed
-static int speedControl(direction_t direction, int up, int down)
+static int speedControl(Direction direction, int up, int down)
 {
     return (direction > 0) ? up : (direction < 0) ? down : 0;
 }
@@ -42,7 +42,7 @@ void setRightDriveTrain(int speed)
     motorSet(DRIVE_BR, -speed);
 }
 
-void setLift(direction_t direction)
+void setLift(Direction direction)
 {
     int spoolSpeed = speedControl(direction, LIFT_SPOOL_UP_SPEED,
         LIFT_SPOOL_DOWN_SPEED);
@@ -52,13 +52,13 @@ void setLift(direction_t direction)
     motorSet(LIFT_TOWER, towerSpeed);
 }
 
-void setClaw(direction_t direction)
+void setClaw(Direction direction)
 {
     int speed = speedControl(direction, CLAW_SPEED, -CLAW_SPEED);
     motorSet(CLAW, -speed);
 }
 
-void setMobileGoalLift(direction_t direction)
+void setMobileGoalLift(Direction direction)
 {
     int speed = speedControl(direction, MGL_SPEED, -MGL_SPEED);
     motorSet(MGL, speed);

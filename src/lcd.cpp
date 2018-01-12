@@ -1,0 +1,126 @@
+// contains the code that controls the LCD screen
+
+#include "main.hpp"
+
+// what port the LCD screen goes into
+#define LCD_PORT uart1
+// amount of milliseconds between each LCD update
+#define LCD_POLL_SPEED 100ul
+
+// the different types of things the LCD can do
+enum LoopState
+{
+    // select the autonomous program
+    AUTON_SELECT,
+    // display primary/backup battery voltage
+    DISPLAY_BATTERY
+};
+
+// tracks the state of the buttons
+class ButtonState
+{
+public:
+    ButtonState(FILE* lcdPort): lcdPort(lcdPort), current(0), previous(0) {}
+
+    // polls all the lcd buttons
+    void poll()
+    {
+        previous = current;
+        current = lcdReadButtons(lcdPort);
+    }
+
+    // checks if a button was just pressed
+    bool justPressed(unsigned int button) const
+    {
+        return current & button && !(previous & button);
+    }
+
+private:
+    FILE* lcdPort;
+    unsigned int current;
+    unsigned int previous;
+};
+
+// corresponds to state_t enum
+// takes a reference to the ButtonState, returns what the LoopState should be
+//  changed to
+static LoopState autonSelect(const ButtonState& buttons);
+static LoopState displayBattery(const ButtonState& buttons);
+
+// declared in main.h
+void lcdMain(void*)
+{
+    lcdInit(LCD_PORT);
+    lcdClear(LCD_PORT);
+    // the action that should be taken, kinda like a state machine
+    LoopState loopState = AUTON_SELECT;
+    // tells loop functions what buttons are being pressed
+    ButtonState buttons(LCD_PORT);
+    // used for timing cyclic delays
+    unsigned long time = millis();
+    while (true)
+    {
+        buttons.poll();
+        // do a different loop action based on loopState
+        switch (loopState)
+        {
+        case AUTON_SELECT:
+            loopState = autonSelect(buttons);
+            break;
+        case DISPLAY_BATTERY:
+            loopState = displayBattery(buttons);
+            break;
+        }
+        // wait a bit before receiving input again
+        taskDelayUntil(&time, LCD_POLL_SPEED);
+    }
+}
+
+LoopState autonSelect(const ButtonState& buttons)
+{
+    // used for printing the name of an autonomous program
+    static const char* autonNames[AUTONID_MAX + 1] =
+    {
+        "Forward+Backward",
+        "Score MG w/Cone",
+        "Score Stationary"
+    };
+    // see if the left/right buttons were just pressed
+    bool left = buttons.justPressed(LCD_BTN_LEFT);
+    bool right = buttons.justPressed(LCD_BTN_RIGHT);
+    // if left, go up the autonNames list
+    if (left && !right)
+    {
+        autonid = (AutonID) (autonid - 1);
+        if (autonid < AUTONID_MIN || autonid > AUTONID_MAX)
+        {
+            // go back to the end of the list
+            autonid = AUTONID_MAX;
+        }
+    }
+    // if right, go down the autonNames list
+    else if (!left && right)
+    {
+        autonid = (AutonID) (autonid + 1);
+        if (autonid < AUTONID_MIN || autonid > AUTONID_MAX)
+        {
+            // go back to the start of the list
+            autonid = AUTONID_MIN;
+        }
+    }
+    lcdSetText(LCD_PORT, 1, ROBOT_NAME " will do:");
+    lcdSetText(LCD_PORT, 2, autonNames[autonid]);
+    // if auton selected or enabled by comp switch, start displaying battery
+    if (buttons.justPressed(LCD_BTN_CENTER) || isEnabled())
+    {
+        return DISPLAY_BATTERY;
+    }
+    return AUTON_SELECT;
+}
+
+LoopState displayBattery(const ButtonState& /* unused for now */)
+{
+    lcdPrint(LCD_PORT, 1, "Primary: %.1fV", powerLevelMain() / 1000.0f);
+    lcdPrint(LCD_PORT, 2, "Backup:  %.1fV", powerLevelBackup() / 1000.0f);
+    return DISPLAY_BATTERY;
+}

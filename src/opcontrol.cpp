@@ -1,7 +1,7 @@
 // contains code for the driver control period and anything else associated with
 //  it
 
-#include "main.h"
+#include "main.hpp"
 
 // uncomment this line to enable arcade controls
 #define TANK_CONTROLS
@@ -27,7 +27,7 @@ static void controlAutonomous();
 static int threshold(int value);
 
 // merges two binary directions (up/down) into a ternary direction (+up/0/-down)
-static direction_t direction(bool up, bool down);
+static Direction direction(bool up, bool down);
 
 // main point of execution for the driver control period
 void operatorControl()
@@ -121,7 +121,7 @@ int threshold(int value)
     return abs(value) > THRESHOLD ? value : 0;
 }
 
-direction_t direction(bool up, bool down)
+Direction direction(bool up, bool down)
 {
-    return (direction_t) (up - down);
+    return (Direction) (up - down);
 }
