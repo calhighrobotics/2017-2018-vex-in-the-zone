@@ -111,7 +111,7 @@ LoopState autonSelect(const ButtonState& buttons)
     lcdSetText(LCD_PORT, 1, ROBOT_NAME " will do:");
     lcdSetText(LCD_PORT, 2, autonNames[autonid]);
     // if auton selected or enabled by comp switch, start displaying battery
-    if (buttons.justPressed(LCD_BTN_CENTER) || isEnabled())
+    if (buttons.justPressed(LCD_BTN_CENTER))
     {
         return DISPLAY_BATTERY;
     }
