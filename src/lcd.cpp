@@ -118,9 +118,13 @@ LoopState autonSelect(const ButtonState& buttons)
     return AUTON_SELECT;
 }
 
-LoopState displayBattery(const ButtonState& /* unused for now */)
+LoopState displayBattery(const ButtonState& buttons)
 {
     lcdPrint(LCD_PORT, 1, "Primary: %.1fV", powerLevelMain() / 1000.0f);
     lcdPrint(LCD_PORT, 2, "Backup:  %.1fV", powerLevelBackup() / 1000.0f);
+    if (buttons.justPressed(LCD_BTN_CENTER))
+    {
+        return AUTON_SELECT;
+    }
     return DISPLAY_BATTERY;
 }
