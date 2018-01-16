@@ -15,6 +15,7 @@ void initializeIO()
 //  and other stuff
 void initialize()
 {
+    setTeamName(TEAM_NAME);
     // do all the LCD stuff on a separate thread
     taskCreate(lcdMain, TASK_DEFAULT_STACK_SIZE, NULL,
         TASK_PRIORITY_DEFAULT - 1);

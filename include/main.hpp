@@ -6,6 +6,7 @@
 
 #include <API.h>
 
+#define TEAM_NAME "1516B"
 #define ROBOT_NAME "Robart"
 
 enum Direction
