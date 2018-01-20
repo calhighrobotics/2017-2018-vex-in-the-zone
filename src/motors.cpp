@@ -14,6 +14,13 @@
 #define DRIVE_BR 9
 #define LIFT_SPOOL_RIGHT 10
 
+// IME network
+#define IME_LEFT 0
+#define IME_RIGHT 1
+#define IME_LIFT 2
+#define IME_MGL 3
+#define IME_COUNT 4 // number of IEMs
+
 // settings for various button-controled parts
 #define LIFT_UP_SPEED 127
 #define LIFT_DOWN_SPEED (-127)
@@ -36,6 +43,22 @@ static int speedControl(motor::Direction direction, int up, int down)
         return down;
     }
     return 0;
+}
+
+// declared in main.hpp
+
+void init::initIMEs()
+{
+    int IMECount = imeInitializeAll();
+    if (IMECount != IME_COUNT)
+    {
+        print("ERROR: INCORRECT NUMBER OF IMES INITIALIZED\n"
+            "EXPECT UNRELIABLE BEHAVIOR\n");
+    }
+    imeReset(IME_LEFT);
+    imeReset(IME_RIGHT);
+    imeReset(IME_LIFT);
+    imeReset(IME_MGL);
 }
 
 void motor::setLeftDriveTrain(int speed)

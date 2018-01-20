@@ -17,6 +17,8 @@
 // functions with void* parameter run in their own task
 namespace init
 {
+// initializes IMEs
+void initIMEs();
 // starts up the LCD to do cool stuff, put on its own task by init.cpp
 void lcdMain(void*);
 } // end namespace init
@@ -49,6 +51,8 @@ enum Direction
     DOWN = -1,
     OPEN = -1
 };
+
+// other general stuff
 void setLeftDriveTrain(int speed);
 void setRightDriveTrain(int speed);
 void setLift(Direction direction);
