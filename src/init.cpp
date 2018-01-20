@@ -3,7 +3,7 @@
 #include "main.hpp"
 
 // declared in main.hpp
-AutonID autonid = SCORE_STATIONARY;
+auton::AutonID auton::autonid = auton::SCORE_STATIONARY;
 
 // pre-initialization code, mostly just setting default pin modes and port
 //  states and stuff
@@ -17,6 +17,6 @@ void initialize()
 {
     setTeamName(TEAM_NAME);
     // do all the LCD stuff on a separate thread
-    taskCreate(lcdMain, TASK_DEFAULT_STACK_SIZE, NULL,
+    taskCreate(init::lcdMain, TASK_DEFAULT_STACK_SIZE, NULL,
         TASK_PRIORITY_DEFAULT - 1);
 }

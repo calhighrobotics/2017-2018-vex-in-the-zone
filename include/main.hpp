@@ -6,18 +6,21 @@
 
 #include <API.h>
 
+// general info
 #define TEAM_NAME "1516B"
 #define ROBOT_NAME "Robart"
 
-enum Direction
+// used by init.cpp to start essential tasks and initialize stuff
+// functions with void* parameter run in their own task
+namespace init
 {
-    STOP = 0,
-    UP = 1,
-    CLOSE = 1,
-    DOWN = -1,
-    OPEN = -1
-};
+// starts up the LCD to do cool stuff, put on its own task by init.cpp
+void lcdMain(void*);
+} // end namespace init
 
+// stuff that has to do with autonomous
+namespace auton
+{
 enum AutonID
 {
     AUTONID_MIN,
@@ -29,21 +32,27 @@ enum AutonID
 
 // determines what autonomous program to run
 extern AutonID autonid;
+} // end namespace auto
 
-// starts up the LCD to do cool stuff, put on its own task by init.cpp
-void lcdMain(void*);
-
-// + forward, - backward
+// stuff that has to do with motors
+namespace motor
+{
+// indicates a motor direction
+enum Direction
+{
+    STOP = 0,
+    UP = 1,
+    CLOSE = 1,
+    DOWN = -1,
+    OPEN = -1
+};
 void setLeftDriveTrain(int speed);
 void setRightDriveTrain(int speed);
-// + up, - down
 void setLift(Direction direction);
-// + closes, - opens
 void setClaw(Direction direction);
-// + up, - down
 void setMobileGoalLift(Direction direction);
-// true locks, false unlocks
 void setLiftLock(bool locked);
+} // end namespace motor
 
 // these last 4 functions down here are what PROS uses internally to do cool
 //  stuff so it's not recommended to call them within the actual code

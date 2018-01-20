@@ -21,22 +21,22 @@ static void turnCCW(unsigned int angle, int turnRadius, int rightPower);
 static void straight(unsigned long distance, int power);
 static void stop();
 // other stuff
-static void lift(Direction direction, unsigned long waitTime);
-static void claw(Direction direction);
-static void mgl(Direction direction, unsigned long waitTime);
+static void lift(motor::Direction direction, unsigned long waitTime);
+static void claw(motor::Direction direction);
+static void mgl(motor::Direction direction, unsigned long waitTime);
 
 // main point of execution for the autonomous period
 void autonomous()
 {
-    switch (autonid)
+    switch (auton::autonid)
     {
-    case FORWARD_BACKWARD:
+    case auton::FORWARD_BACKWARD:
         forwardBackward();
         break;
-    case SCORE_MG_WITH_CONE:
+    case auton::SCORE_MG_WITH_CONE:
         scoreMgWithCone();
         break;
-    case SCORE_STATIONARY:
+    case auton::SCORE_STATIONARY:
         scoreStationary();
         break;
     }
@@ -51,6 +51,7 @@ void forwardBackward()
 
 void scoreMgWithCone()
 {
+    using namespace motor;
     // pick up the cone
     claw(CLOSE);
     lift(UP, 1200);
@@ -84,7 +85,7 @@ void scoreMgWithCone()
 
 void scoreStationary()
 {
-    stop();
+    using namespace motor;
     // start on the middle
     // pick up the cone
     claw(CLOSE);
@@ -133,8 +134,8 @@ void turnCW(unsigned int angle, int turnRadius, int leftPower)
      */
     unsigned long waitTime = ((turnRadius + BOT_RADIUS) * 3175ul * angle) /
         (WHEEL_RADIUS * MOTOR_SPEED * 9ul * leftPower);
-    setLeftDriveTrain(leftPower);
-    setRightDriveTrain(rightPower);
+    motor::setLeftDriveTrain(leftPower);
+    motor::setRightDriveTrain(rightPower);
     taskDelay(waitTime);
 }
 
@@ -144,8 +145,8 @@ void turnCCW(unsigned int angle, int turnRadius, int rightPower)
         ((int) turnRadius + (int) BOT_RADIUS);
     unsigned long waitTime = ((turnRadius + BOT_RADIUS) * 3175ul * angle) /
         (WHEEL_RADIUS * MOTOR_SPEED * 9ul * rightPower);
-    setLeftDriveTrain(leftPower);
-    setRightDriveTrain(rightPower);
+    motor::setLeftDriveTrain(leftPower);
+    motor::setRightDriveTrain(rightPower);
     taskDelay(waitTime);
 }
 
@@ -160,36 +161,36 @@ void straight(unsigned long distance, int power)
      */
     unsigned long waitTime = (127000ul * distance) /
         (2ul * WHEEL_RADIUS * MOTOR_SPEED * PI * (unsigned long) abs(power));
-    setLeftDriveTrain(power);
-    setRightDriveTrain(power);
+    motor::setLeftDriveTrain(power);
+    motor::setRightDriveTrain(power);
     taskDelay(waitTime);
 }
 
 void stop()
 {
-    setLeftDriveTrain(0);
-    setRightDriveTrain(0);
+    motor::setLeftDriveTrain(0);
+    motor::setRightDriveTrain(0);
 }
 
-void lift(Direction direction, unsigned long waitTime)
+void lift(motor::Direction direction, unsigned long waitTime)
 {
-    setLiftLock(false);
-    setLift(direction);
+    motor::setLiftLock(false);
+    motor::setLift(direction);
     taskDelay(waitTime);
-    setLift(STOP);
-    setLiftLock(true);
+    motor::setLift(motor::STOP);
+    motor::setLiftLock(true);
 }
 
-void claw(Direction direction)
+void claw(motor::Direction direction)
 {
-    setClaw(direction);
+    motor::setClaw(direction);
     taskDelay(CLAW_TIME);
-    setClaw(STOP);
+    motor::setClaw(motor::STOP);
 }
 
-void mgl(Direction direction, unsigned long waitTime)
+void mgl(motor::Direction direction, unsigned long waitTime)
 {
-    setMobileGoalLift(direction);
+    motor::setMobileGoalLift(direction);
     taskDelay(waitTime);
-    setMobileGoalLift(STOP);
+    motor::setMobileGoalLift(motor::STOP);
 }

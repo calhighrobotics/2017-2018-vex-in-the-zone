@@ -27,7 +27,7 @@ static void controlAutonomous();
 static int threshold(int value);
 
 // merges two binary directions (up/down) into a ternary direction (+up/0/-down)
-static Direction direction(bool up, bool down);
+static motor::Direction direction(bool up, bool down);
 
 // main point of execution for the driver control period
 void operatorControl()
@@ -64,8 +64,8 @@ void controlDriveTrain()
         threshold(joystickGetAnalog(1, 1));
 #endif
     // set the drive train motors accordingly
-    setLeftDriveTrain(left);
-    setRightDriveTrain(right);
+    motor::setLeftDriveTrain(left);
+    motor::setRightDriveTrain(right);
 }
 
 void controlClaw()
@@ -94,16 +94,16 @@ void controlLift()
     else
     {
         liftLocked = true;
-        setLift(STOP);
+        motor::setLift(motor::STOP);
     }
-    setLiftLock(liftLocked);
+    motor::setLiftLock(liftLocked);
 }
 
 void controlMobileGoalLift()
 {
     bool mglUp = joystickGetDigital(1, 8, JOY_UP);
     bool mglDown = joystickGetDigital(1, 8, JOY_DOWN);
-    setMobileGoalLift(direction(mglUp, mglDown));
+    motor::setMobileGoalLift(direction(mglUp, mglDown));
 }
 
 #ifdef AUTON_DEBUG
@@ -121,7 +121,7 @@ int threshold(int value)
     return abs(value) > THRESHOLD ? value : 0;
 }
 
-Direction direction(bool up, bool down)
+motor::Direction direction(bool up, bool down)
 {
-    return (Direction) (up - down);
+    return (motor::Direction) (up - down);
 }

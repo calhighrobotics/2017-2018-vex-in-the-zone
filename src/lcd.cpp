@@ -48,7 +48,7 @@ static LoopState autonSelect(const ButtonState& buttons);
 static LoopState displayBattery(const ButtonState& buttons);
 
 // declared in main.h
-void lcdMain(void*)
+void init::lcdMain(void*)
 {
     lcdInit(LCD_PORT);
     lcdClear(LCD_PORT);
@@ -78,6 +78,8 @@ void lcdMain(void*)
 
 LoopState autonSelect(const ButtonState& buttons)
 {
+    // so we don't have to type "auton::" 5 billion times
+    using namespace auton;
     // used for printing the name of an autonomous program
     static const char* autonNames[AUTONID_MAX + 1] =
     {

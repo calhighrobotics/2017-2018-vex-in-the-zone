@@ -24,25 +24,33 @@
 #define LIFT_LOCKED (-95)
 #define LIFT_UNLOCKED (-75)
 
-// translates the ternary direction (+up/0/-down) to an actual speed
-static int speedControl(Direction direction, int up, int down)
+// converts a Direction to an actual speed
+static int speedControl(motor::Direction direction, int up, int down)
 {
-    return (direction > 0) ? up : (direction < 0) ? down : 0;
+    if (direction == motor::UP)
+    {
+        return up;
+    }
+    if (direction == motor::DOWN)
+    {
+        return down;
+    }
+    return 0;
 }
 
-void setLeftDriveTrain(int speed)
+void motor::setLeftDriveTrain(int speed)
 {
     motorSet(DRIVE_FL, speed);
     motorSet(DRIVE_BL, speed);
 }
 
-void setRightDriveTrain(int speed)
+void motor::setRightDriveTrain(int speed)
 {
     motorSet(DRIVE_FR, -speed);
     motorSet(DRIVE_BR, -speed);
 }
 
-void setLift(Direction direction)
+void motor::setLift(Direction direction)
 {
     int spoolSpeed = speedControl(direction, LIFT_SPOOL_UP_SPEED,
         LIFT_SPOOL_DOWN_SPEED);
@@ -52,19 +60,19 @@ void setLift(Direction direction)
     motorSet(LIFT_TOWER, towerSpeed);
 }
 
-void setClaw(Direction direction)
+void motor::setClaw(Direction direction)
 {
     int speed = speedControl(direction, CLAW_SPEED, -CLAW_SPEED);
     motorSet(CLAW, -speed);
 }
 
-void setMobileGoalLift(Direction direction)
+void motor::setMobileGoalLift(Direction direction)
 {
     int speed = speedControl(direction, MGL_SPEED, -MGL_SPEED);
     motorSet(MGL, speed);
 }
 
-void setLiftLock(bool locked)
+void motor::setLiftLock(bool locked)
 {
     motorSet(LIFT_LOCK, locked ? LIFT_LOCKED : LIFT_UNLOCKED);
 }
