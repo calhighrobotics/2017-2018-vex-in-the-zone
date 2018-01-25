@@ -9,8 +9,6 @@
 //#define AUTON_DEBUG
 // used in the threshold function to prevent joystick ghosting
 #define THRESHOLD 4
-// the time in milliseconds between polls for driver input
-#define POLL_SPEED 15ul
 
 // these functions get and respond to driver input for every different part
 // operatorControl() should be calling these functions in the order below
@@ -45,7 +43,7 @@ void operatorControl()
         controlAutonomous();
 #endif
         // wait a bit before receiving input again
-        taskDelayUntil(&time, POLL_SPEED);
+        taskDelayUntil(&time, MOTOR_POLL_RATE);
     }
 }
 

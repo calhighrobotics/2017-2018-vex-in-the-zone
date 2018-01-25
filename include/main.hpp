@@ -10,6 +10,9 @@
 #define TEAM_NAME "1516B"
 #define ROBOT_NAME "Robart"
 
+// time it takes for a motor to be updated
+#define MOTOR_POLL_RATE 20 // ms/update
+
 // used by init.cpp to start essential tasks and initialize stuff
 // functions with void* parameter run in their own task
 namespace init
