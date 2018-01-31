@@ -13,7 +13,9 @@ enum LoopState
     // select the autonomous program
     AUTON_SELECT,
     // display primary/backup battery voltage
-    DISPLAY_BATTERY
+    DISPLAY_BATTERY,
+    // control the lift from the LCD
+    LIFT_CONTROL
 };
 
 // tracks the state of the buttons
@@ -28,11 +30,15 @@ public:
         previous = current;
         current = lcdReadButtons(lcdPort);
     }
-
+    // checks if a button was pressed
+    bool pressed(unsigned int button) const
+    {
+        return current & button;
+    }
     // checks if a button was just pressed
     bool justPressed(unsigned int button) const
     {
-        return current & button && !(previous & button);
+        return pressed(button) && !(previous & button);
     }
 
 private:
@@ -46,6 +52,7 @@ private:
 //  changed to
 static LoopState autonSelect(const ButtonState& buttons);
 static LoopState displayBattery(const ButtonState& buttons);
+static LoopState liftControl(const ButtonState& buttons);
 
 // declared in main.h
 void init::lcdMain(void*)
@@ -53,7 +60,7 @@ void init::lcdMain(void*)
     lcdInit(LCD_PORT);
     lcdClear(LCD_PORT);
     // the action that should be taken, kinda like a state machine
-    LoopState loopState = AUTON_SELECT;
+    LoopState loopState = LIFT_CONTROL;
     // tells loop functions what buttons are being pressed
     ButtonState buttons(LCD_PORT);
     // used for timing cyclic delays
@@ -69,6 +76,9 @@ void init::lcdMain(void*)
             break;
         case DISPLAY_BATTERY:
             loopState = displayBattery(buttons);
+            break;
+        case LIFT_CONTROL:
+            loopState = liftControl(buttons);
             break;
         }
         // wait a bit before receiving input again
@@ -126,7 +136,30 @@ LoopState displayBattery(const ButtonState& buttons)
     lcdPrint(LCD_PORT, 2, "Backup:  %.1fV", powerLevelBackup() / 1000.0f);
     if (buttons.justPressed(LCD_BTN_CENTER))
     {
-        return AUTON_SELECT;
+        return LIFT_CONTROL;
     }
     return DISPLAY_BATTERY;
+}
+
+LoopState liftControl(const ButtonState& buttons)
+{
+    lcdSetText(LCD_PORT, 1, "Lift Control");
+    lcdSetText(LCD_PORT, 2, "v              ^");
+    if (buttons.pressed(LCD_BTN_LEFT))
+    {
+        motor::setLift(-127);
+    }
+    else if (buttons.pressed(LCD_BTN_RIGHT))
+    {
+        motor::setLift(127);
+    }
+    else
+    {
+        motor::setLift(0);
+    }
+    if (buttons.justPressed(LCD_BTN_CENTER) || isJoystickConnected(1))
+    {
+        return AUTON_SELECT;
+    }
+    return LIFT_CONTROL;
 }

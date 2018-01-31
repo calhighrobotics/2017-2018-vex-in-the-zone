@@ -75,26 +75,20 @@ void controlClaw()
 
 void controlLift()
 {
-    static bool liftLocked = true;
     bool liftUp = joystickGetDigital(1, 6, JOY_UP);
     bool liftDown = joystickGetDigital(1, 6, JOY_DOWN);
-    if (liftUp || liftDown)
+    if (liftUp && !liftDown)
     {
-        if (liftLocked)
-        {
-            liftLocked = false;
-        }
-        else
-        {
-            setLift(direction(liftUp, liftDown));
-        }
+        motor::setLift(127);
+    }
+    else if (!liftUp && liftDown)
+    {
+        motor::setLift(-127);
     }
     else
     {
-        liftLocked = true;
-        motor::setLift(motor::STOP);
+        motor::setLift(0);
     }
-    motor::setLiftLock(liftLocked);
 }
 
 void controlMobileGoalLift()

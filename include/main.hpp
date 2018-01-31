@@ -5,6 +5,7 @@
 #define MAIN_HPP
 
 #include <API.h>
+#include <math.h>
 
 // general info
 #define TEAM_NAME "1516B"
@@ -21,6 +22,8 @@ namespace init
 void initIMEs();
 // starts up the LCD to do cool stuff, put on its own task by init.cpp
 void lcdMain(void*);
+// uses a PID loop to control the position of the lift
+void liftControl(void*);
 } // end namespace init
 
 // stuff that has to do with autonomous
@@ -52,13 +55,18 @@ enum Direction
     OPEN = -1
 };
 
+double getLiftVelocity(); // rpm
+double getLiftPos(); // max=127, min=0
+double getLiftTarget();
+void setLiftTarget(double targetPos);
+void setLift(int drive);
+
 // other general stuff
 void setLeftDriveTrain(int speed);
 void setRightDriveTrain(int speed);
 void setLift(Direction direction);
 void setClaw(Direction direction);
 void setMobileGoalLift(Direction direction);
-void setLiftLock(bool locked);
 } // end namespace motor
 
 // these last 4 functions down here are what PROS uses internally to do cool

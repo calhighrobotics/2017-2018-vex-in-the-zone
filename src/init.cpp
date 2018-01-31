@@ -21,4 +21,6 @@ void initialize()
     init::initIMEs();
     taskCreate(init::lcdMain, TASK_DEFAULT_STACK_SIZE, NULL,
         TASK_PRIORITY_DEFAULT - 1);
+    taskCreate(init::liftControl, TASK_DEFAULT_STACK_SIZE, NULL,
+        TASK_PRIORITY_DEFAULT - 1);
 }

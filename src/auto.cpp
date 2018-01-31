@@ -174,11 +174,9 @@ void stop()
 
 void lift(motor::Direction direction, unsigned long waitTime)
 {
-    motor::setLiftLock(false);
     motor::setLift(direction);
     taskDelay(waitTime);
     motor::setLift(motor::STOP);
-    motor::setLiftLock(true);
 }
 
 void claw(motor::Direction direction)
