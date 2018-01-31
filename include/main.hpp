@@ -11,8 +11,11 @@
 #define TEAM_NAME "1516B"
 #define ROBOT_NAME "Robart"
 
-// time it takes for a motor to be updated
-#define MOTOR_POLL_RATE 20 // ms/update
+// time it takes for a motor to be updated in milliseconds
+#define MOTOR_POLL_RATE 20
+
+// amount of PID modules that exist
+#define PID_MODULE_COUNT 2
 
 // used by init.cpp to start essential tasks and initialize stuff
 // functions with void* parameter run in their own task
@@ -22,8 +25,6 @@ namespace init
 void initIMEs();
 // starts up the LCD to do cool stuff, put on its own task by init.cpp
 void lcdMain(void*);
-// uses a PID loop to control the position of the lift
-void liftControl(void*);
 } // end namespace init
 
 // stuff that has to do with autonomous
@@ -55,11 +56,18 @@ enum Direction
     OPEN = -1
 };
 
-double getLiftVelocity(); // rpm
-double getLiftPos(); // max=127, min=0
+// cone lift functions
+// max=127, min=0
+double getLiftPos();
 double getLiftTarget();
 void setLiftTarget(double targetPos);
 void setLift(int drive);
+
+// mobile goal lift functions
+double getMglPos();
+double getMglTarget();
+void setMglTarget(double targetPos);
+void setMgl(int drive);
 
 // other general stuff
 void setLeftDriveTrain(int speed);
@@ -68,6 +76,46 @@ void setLift(Direction direction);
 void setClaw(Direction direction);
 void setMobileGoalLift(Direction direction);
 } // end namespace motor
+
+namespace pid
+{
+// PID settings for a single module
+struct Module
+{
+    // function for setting motors
+    typedef void (*motorfunc_t)(int);
+    // function for getting a position
+    typedef double (*posfunc_t)();
+    // constructor
+    Module(motorfunc_t setMotors, posfunc_t getTargetPos, posfunc_t getPos,
+        double kp, double ki, double kd, double maxError, bool debug = false)
+        : setMotors(setMotors), getTargetPos(getTargetPos), getPos(getPos),
+        kp(kp), ki(ki), kd(kd), maxError(maxError), lastError(0), error(0),
+        integral(0), debug(debug) {}
+    // sets the motors
+    const motorfunc_t setMotors;
+    // gets the target position
+    const posfunc_t getTargetPos;
+    // gets the current position
+    const posfunc_t getPos;
+    // proportional, integral, and derivative constants
+    const double kp;
+    const double ki;
+    const double kd;
+    // absolute value of error should be lower than this for the integral term
+    //  to be allowed to kick in
+    const double maxError;
+    // runtime variables
+    double lastError;
+    double error;
+    double integral;
+    // true if debug info should be printed
+    const bool debug;
+};
+
+// uses a PID loop to control a PID module
+void controller(pid::Module* modules);
+} // end namespace pid
 
 // these last 4 functions down here are what PROS uses internally to do cool
 //  stuff so it's not recommended to call them within the actual code
