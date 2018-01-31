@@ -36,7 +36,7 @@
 #define MAX_POS 127.0
 #define MIN_POS 0.0
 #define COUNTS_PER_REV_TORQUE 627.2 // IME counts per rev in high torque mode
-#define LIFT_MAX_REVS 2.0
+#define LIFT_MAX_REVS 6.0
 #define MGL_MAX_REVS 3.0
 
 static double liftTarget = 0;
