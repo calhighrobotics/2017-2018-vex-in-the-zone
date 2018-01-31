@@ -35,7 +35,7 @@
 
 #define MAX_POS 127.0
 #define MIN_POS 0.0
-#define COUNTS_PER_REV_SPEED 392.0 // IME counts per rev in high speed mode
+#define COUNTS_PER_REV_TORQUE 627.2 // IME counts per rev in high torque mode
 #define LIFT_MAX_REVS 2.0
 #define MGL_MAX_REVS 3.0
 
@@ -82,7 +82,7 @@ double motor::getLiftPos()
 {
     int counts;
     imeGet(IME_LIFT, &counts);
-    return MAX_POS / LIFT_MAX_REVS * COUNTS_PER_REV_SPEED * -counts;
+    return MAX_POS / LIFT_MAX_REVS * COUNTS_PER_REV_TORQUE * -counts;
 }
 
 double motor::getLiftTarget()
@@ -121,7 +121,7 @@ double motor::getMglPos()
 {
     int counts;
     imeGet(IME_MGL, &counts);
-    return MAX_POS / MGL_MAX_REVS * COUNTS_PER_REV_SPEED * -counts;
+    return MAX_POS / MGL_MAX_REVS * COUNTS_PER_REV_TORQUE * -counts;
 }
 
 double motor::getMglTarget()
@@ -183,6 +183,6 @@ void motor::setClaw(Direction direction)
 
 void motor::setMobileGoalLift(Direction direction)
 {
-    int speed = speedControl(direction, MGL_SPEED, -MGL_SPEED);
-    motorSet(MGL, speed);
+    /*int speed = speedControl(direction, MGL_SPEED, -MGL_SPEED);
+    motorSet(MGL, speed);*/
 }
