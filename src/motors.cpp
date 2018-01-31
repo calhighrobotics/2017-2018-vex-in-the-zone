@@ -24,14 +24,7 @@
 #define IME_COUNT 4 // number of IEMs
 
 // settings for various button-controled parts
-#define LIFT_UP_SPEED 127
-#define LIFT_DOWN_SPEED (-127)
-#define LIFT_SPOOL_UP_SPEED 127
-#define LIFT_SPOOL_DOWN_SPEED (-24)
 #define CLAW_SPEED 63
-#define MGL_SPEED 63
-#define LIFT_LOCKED (-95)
-#define LIFT_UNLOCKED (-75)
 
 #define MAX_POS 127.0
 #define MIN_POS 0.0
@@ -66,8 +59,8 @@ void init::initIMEs()
 {
     liftTargetMutex = mutexCreate();
     mglTargetMutex = mutexCreate();
-    int IMECount = imeInitializeAll();
-    if (IMECount != IME_COUNT)
+    int imeCount = imeInitializeAll();
+    if (imeCount != IME_COUNT)
     {
         print("ERROR: INCORRECT NUMBER OF IMES INITIALIZED\n"
             "EXPECT UNRELIABLE BEHAVIOR\n");
@@ -82,7 +75,7 @@ double motor::getLiftPos()
 {
     int counts;
     imeGet(IME_LIFT, &counts);
-    return MAX_POS / LIFT_MAX_REVS * COUNTS_PER_REV_TORQUE * -counts;
+    return MAX_POS / (LIFT_MAX_REVS * COUNTS_PER_REV_TORQUE) * -counts;
 }
 
 double motor::getLiftTarget()
@@ -121,7 +114,7 @@ double motor::getMglPos()
 {
     int counts;
     imeGet(IME_MGL, &counts);
-    return MAX_POS / MGL_MAX_REVS * COUNTS_PER_REV_TORQUE * -counts;
+    return MAX_POS / (MGL_MAX_REVS * COUNTS_PER_REV_TORQUE) * -counts;
 }
 
 double motor::getMglTarget()
