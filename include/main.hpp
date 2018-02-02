@@ -21,8 +21,6 @@
 // functions with void* parameter run in their own task
 namespace init
 {
-// initializes IMEs
-void initIMEs();
 // starts up the LCD to do cool stuff, put on its own task by init.cpp
 void lcdMain(void*);
 } // end namespace init
@@ -46,6 +44,11 @@ extern AutonID autonid;
 // stuff that has to do with motors
 namespace motor
 {
+// does motor initialization stuff
+void init();
+// task that acts as a slew rate manager
+void slewRateManager(void*);
+
 // indicates a motor direction
 enum Direction
 {
