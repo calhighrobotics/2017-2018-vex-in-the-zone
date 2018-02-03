@@ -30,7 +30,7 @@ void initialize()
     init::initIMEs();
     taskCreate(init::lcdMain, TASK_DEFAULT_STACK_SIZE, NULL,
         TASK_PRIORITY_DEFAULT - 1);
-    taskCreate(reinterpret_cast<TaskCode>(pid::controller),
+    /*taskCreate(reinterpret_cast<TaskCode>(pid::controller),
         TASK_DEFAULT_STACK_SIZE, static_cast<void*>(&pidModules),
-        TASK_PRIORITY_DEFAULT - 1);
+        TASK_PRIORITY_DEFAULT - 1);*/
 }
