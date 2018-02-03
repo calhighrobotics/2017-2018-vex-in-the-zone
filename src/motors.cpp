@@ -4,14 +4,14 @@
 
 // ports that are defined for the robot
 #define TWISTY_BOI 1
-#define MGL_RIGHT 2
+#define MGL_LEFT 2
 #define DRIVE_LEFT 3
 #define LIFT_BL 4
 #define LIFT_TL 5
 #define LIFT_BR 6
 #define LIFT_TR 7
 #define DRIVE_RIGHT 4
-#define MGL_LEFT 9
+#define MGL_RIGHT 9
 #define CLAW 10
 
 // IME network
