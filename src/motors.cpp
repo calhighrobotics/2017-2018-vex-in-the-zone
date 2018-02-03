@@ -105,35 +105,36 @@ void motor::slewRateManager(void*)
             // see if we need to change the motor value
             int drive = motorGet(port);
             mutexTake(requestedMutex[port], -1);
-            if (requested[port] != drive)
+            int req = requested[port];
+            mutexGive(requestedMutex[port]);
+            if (req != drive)
             {
-                if (requested[port] > drive)
+                if (req > drive)
                 {
                     // increasing
-                    if (requested[port] - drive > SLEW_RATE)
+                    if (req - drive > SLEW_RATE)
                     {
-                        // limit the increase by slewRate
+                        // limit the increase by slew rate
                         drive += SLEW_RATE;
                     }
                     else
                     {
-                        drive = requested[port];
+                        drive = req;
                     }
                 }
-                else if (requested[port] < drive)
+                else if (req < drive)
                 {
                     // decreasing
-                    if (requested[port] - drive < -SLEW_RATE)
+                    if (req - drive < -SLEW_RATE)
                     {
-                        // limit the increase by slewRate
+                        // limit the increase by slew rate
                         drive -= SLEW_RATE;
                     }
                     else
                     {
-                        drive = requested[port];
+                        drive = req;
                     }
                 }
-                mutexGive(requestedMutex[port]);
                 // finally, set the motor
                 motorSet(port, drive);
             }
