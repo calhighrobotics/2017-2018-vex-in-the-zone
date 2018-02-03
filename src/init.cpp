@@ -20,6 +20,7 @@ void initializeIO()
 {
     // automatically resets the cortex if bad stuff happens, e.g. a static shock
     watchdogInit();
+    sensor::init();
 }
 
 // initialization code, usually for initializing sensors, LCDs, globals, IMEs,

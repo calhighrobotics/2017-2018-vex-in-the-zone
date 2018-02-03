@@ -85,6 +85,8 @@ void setMobileGoalLift(Direction direction);
 
 namespace sensor
 {
+// initializes all sensors, should be run in initializeIO
+void init();
 // checks if the lift is fully down
 bool isLiftDown();
 }
