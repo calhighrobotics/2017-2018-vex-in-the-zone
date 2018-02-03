@@ -13,8 +13,9 @@
 // these functions get and respond to driver input for every different part
 // operatorControl() should be calling these functions in the order below
 static void controlDriveTrain();
-static void controlClaw();
 static void controlLift();
+static void controlClaw();
+static void controlTwistyBoi();
 static void controlMobileGoalLift();
 #ifdef AUTON_DEBUG
 static void controlAutonomous();
@@ -36,8 +37,9 @@ void operatorControl()
     while (1)
     {
         controlDriveTrain();
-        controlClaw();
         controlLift();
+        controlClaw();
+        controlTwistyBoi();
         controlMobileGoalLift();
 #ifdef AUTON_DEBUG
         controlAutonomous();
@@ -66,13 +68,6 @@ void controlDriveTrain()
     motor::setRightDriveTrain(right);
 }
 
-void controlClaw()
-{
-    bool clawClose = joystickGetDigital(1, 5, JOY_UP);
-    bool clawOpen = joystickGetDigital(1, 5, JOY_DOWN);
-    setClaw(direction(clawClose, clawOpen));
-}
-
 void controlLift()
 {
     bool liftUp = joystickGetDigital(1, 6, JOY_UP);
@@ -89,6 +84,20 @@ void controlLift()
     {
         motor::setLift(0);
     }
+}
+
+void controlClaw()
+{
+    bool clawClose = joystickGetDigital(1, 5, JOY_UP);
+    bool clawOpen = joystickGetDigital(1, 5, JOY_DOWN);
+    motor::setClaw(direction(clawClose, clawOpen));
+}
+
+void controlTwistyBoi()
+{
+    bool forward = joystickGetDigital(1, 8, JOY_LEFT);
+    bool backward = joystickGetDigital(1, 8, JOY_RIGHT);
+    motor::setTwistyBoi(direction(forward, backward));
 }
 
 void controlMobileGoalLift()

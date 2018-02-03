@@ -3,18 +3,16 @@
 #include "main.hpp"
 
 // ports that are defined for the robot
-#define UNUSED_1 0
-#define DRIVE_BL 0
-#define DRIVE_FL 0
+#define CLAW 1
+#define MGL_RIGHT 2
+#define DRIVE_LEFT 3
 #define LIFT_BL 4
 #define LIFT_TL 5
 #define LIFT_BR 6
 #define LIFT_TR 7
-#define CLAW 0
-#define MGL 0
-#define DRIVE_FR 0
-#define DRIVE_BR 0
-#define UNUSED_2 0
+#define DRIVE_RIGHT 4
+#define MGL_LEFT 9
+#define TWISTY_BOI 10
 
 // IME network
 #define IME_LEFT 0
@@ -25,6 +23,7 @@
 
 // settings for various button-controled parts
 #define CLAW_SPEED 63
+#define TB_SPEED 63
 
 #define MAX_POS 127.0
 #define MIN_POS 0.0
@@ -143,19 +142,18 @@ void motor::setMglTarget(double targetPos)
 
 void motor::setMgl(int drive)
 {
-    motorSet(MGL, drive);
+    motorSet(MGL_LEFT, drive);
+    motorSet(MGL_RIGHT, -drive);
 }
 
 void motor::setLeftDriveTrain(int speed)
 {
-    motorSet(DRIVE_FL, speed);
-    motorSet(DRIVE_BL, speed);
+    motorSet(DRIVE_LEFT, speed);
 }
 
 void motor::setRightDriveTrain(int speed)
 {
-    motorSet(DRIVE_FR, -speed);
-    motorSet(DRIVE_BR, -speed);
+    motorSet(DRIVE_RIGHT, -speed);
 }
 
 void motor::setLift(Direction direction)
@@ -171,7 +169,13 @@ void motor::setLift(Direction direction)
 void motor::setClaw(Direction direction)
 {
     int speed = speedControl(direction, CLAW_SPEED, -CLAW_SPEED);
-    motorSet(CLAW, -speed);
+    motorSet(CLAW, speed);
+}
+
+void motor::setTwistyBoi(Direction direction)
+{
+    int speed = speedControl(direction, TB_SPEED, -TB_SPEED);
+    motorSet(TWISTY_BOI, speed);
 }
 
 void motor::setMobileGoalLift(Direction direction)

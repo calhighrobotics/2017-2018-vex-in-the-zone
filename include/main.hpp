@@ -50,10 +50,15 @@ namespace motor
 enum Direction
 {
     STOP = 0,
+    // lift/mgl
     UP = 1,
-    CLOSE = 1,
     DOWN = -1,
-    OPEN = -1
+    // claw
+    OPEN = 1,
+    CLOSE = -1,
+    // twisty boi
+    FORWARD = 1,
+    BACKWARD = -1
 };
 
 // cone lift functions
@@ -74,6 +79,7 @@ void setLeftDriveTrain(int speed);
 void setRightDriveTrain(int speed);
 void setLift(Direction direction);
 void setClaw(Direction direction);
+void setTwistyBoi(Direction direction);
 void setMobileGoalLift(Direction direction);
 } // end namespace motor
 
