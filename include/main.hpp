@@ -83,6 +83,12 @@ void setTwistyBoi(Direction direction);
 void setMobileGoalLift(Direction direction);
 } // end namespace motor
 
+namespace sensor
+{
+// checks if the lift is fully down
+bool isLiftDown();
+}
+
 namespace pid
 {
 // PID settings for a single module

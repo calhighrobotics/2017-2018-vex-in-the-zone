@@ -103,6 +103,11 @@ void motor::setLiftTarget(double targetPos)
 
 void motor::setLift(int drive)
 {
+    // don't go any lower if the lift is already down
+    if (drive < 0 && sensor::isLiftDown())
+    {
+        drive = 0;
+    }
     motorSet(LIFT_BL, drive);
     motorSet(LIFT_TL, drive);
     motorSet(LIFT_BR, -drive);
