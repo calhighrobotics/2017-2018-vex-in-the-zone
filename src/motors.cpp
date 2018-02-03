@@ -108,6 +108,10 @@ void motor::setLift(int drive)
     {
         drive = 0;
     }
+    if (drive > 0 && getLiftPos() >= MAX_POS)
+    {
+        drive = 0;
+    }
     motorSet(LIFT_BL, -drive);
     motorSet(LIFT_TL, -drive);
     motorSet(LIFT_BR, drive);
