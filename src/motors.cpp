@@ -108,10 +108,10 @@ void motor::setLift(int drive)
     {
         drive = 0;
     }
-    motorSet(LIFT_BL, drive);
-    motorSet(LIFT_TL, drive);
-    motorSet(LIFT_BR, -drive);
-    motorSet(LIFT_TR, -drive);
+    motorSet(LIFT_BL, -drive);
+    motorSet(LIFT_TL, -drive);
+    motorSet(LIFT_BR, drive);
+    motorSet(LIFT_TR, drive);
 }
 
 double motor::getMglPos()
