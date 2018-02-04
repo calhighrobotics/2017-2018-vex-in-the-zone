@@ -157,6 +157,7 @@ LoopState liftControl(const ButtonState& buttons)
     {
         motor::setLift(0);
     }
+    printf("lift pos = %.1f\n", motor::getLiftPos());
     if (buttons.justPressed(LCD_BTN_CENTER) || isJoystickConnected(1))
     {
         return AUTON_SELECT;
