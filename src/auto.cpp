@@ -169,18 +169,18 @@ void lift(double target)
     if (error > 0)
     {
         // going up
-        motor::setLift(127);
         while (motor::getLiftPos() < target)
         {
+            motor::setLift(127);
             taskDelayUntil(&now, MOTOR_POLL_RATE);
         }
     }
     else if (error < 0)
     {
-        motor::setLift(-127);
         // going down
         while (motor::getLiftPos() > target)
         {
+            motor::setLift(-127);
             taskDelayUntil(&now, MOTOR_POLL_RATE);
         }
     }

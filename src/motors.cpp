@@ -117,6 +117,7 @@ void motor::setLift(int drive)
     if (drive < 0 && sensor::isLiftDown())
     {
         drive = 0;
+        imeReset(IME_LIFT);
     }
     if (drive > 0 && getLiftPos() >= MAX_POS)
     {
