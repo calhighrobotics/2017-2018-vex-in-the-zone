@@ -92,7 +92,7 @@ void motor::init()
         imeReset(IME_LEFT);
         imeReset(IME_MGL);
         imeReset(IME_LIFT);
-        print("IMEs ok!");
+        //print("IMEs ok!");
     }
 }
 

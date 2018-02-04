@@ -59,6 +59,7 @@ void init::lcdMain(void*)
 {
     lcdInit(LCD_PORT);
     lcdClear(LCD_PORT);
+    lcdSetBacklight(LCD_PORT, true);
     // the action that should be taken, kinda like a state machine
     LoopState loopState = LIFT_CONTROL;
     // tells loop functions what buttons are being pressed
@@ -157,7 +158,6 @@ LoopState liftControl(const ButtonState& buttons)
     {
         motor::setLift(0);
     }
-    printf("lift pos = %.1f\n", motor::getLiftPos());
     if (buttons.justPressed(LCD_BTN_CENTER) || isJoystickConnected(1))
     {
         return AUTON_SELECT;
