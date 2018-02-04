@@ -75,9 +75,13 @@ double getMglTarget();
 void setMglTarget(double targetPos);
 void setMgl(int drive);
 
-// other general stuff
+double getLeftRotations();
+double getRightRotations();
+void resetDT();
 void setLeftDriveTrain(int speed);
 void setRightDriveTrain(int speed);
+
+// other general stuff
 void setLift(Direction direction);
 void setClaw(Direction direction);
 void setTwistyBoi(Direction direction);

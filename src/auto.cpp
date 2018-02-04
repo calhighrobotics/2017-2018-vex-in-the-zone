@@ -152,18 +152,14 @@ void turnCCW(unsigned int angle, int turnRadius, int rightPower)
 
 void straight(unsigned long distance, int power)
 {
-    /*
-     * speed = (power/127)*(2*PI*WHEEL_RADIUS*MOTOR_SPEED/(1 rotation))
-     * = (power*2*PI*WHEEL_RADIUS*MOTOR_SPEED)/127
-     * waitTime = distance/speed
-     * = (127*distance)/(2*PI*WHEEL_RADIUS*MOTOR_SPEED*power) s
-     * = (127000*distance)/(2*PI*WHEEL_RADIUS*MOTOR_SPEED*power) ms
-     */
-    unsigned long waitTime = (127000ul * distance) /
-        (2ul * WHEEL_RADIUS * MOTOR_SPEED * PI * (unsigned long) abs(power));
+    motor::resetDT();
     motor::setLeftDriveTrain(power);
     motor::setRightDriveTrain(power);
-    taskDelay(waitTime);
+    unsigned long now = millis();
+    while (2.0 * WHEEL_RADIUS * PI * motor::getLeftRotations() < distance)
+    {
+        taskDelayUntil(&now, MOTOR_POLL_RATE);
+    }
 }
 
 void stop()

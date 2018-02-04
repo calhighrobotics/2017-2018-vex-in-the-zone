@@ -232,6 +232,26 @@ void motor::setMgl(int drive)
     motorSet(MGL_RIGHT, -drive);
 }
 
+double motor::getLeftRotations()
+{
+    int counts;
+    imeGet(IME_LEFT, &counts);
+    return counts / COUNTS_PER_REV_TORQUE;
+}
+
+double motor::getRightRotations()
+{
+    int counts;
+    imeGet(IME_RIGHT, &counts);
+    return counts / COUNTS_PER_REV_TORQUE;
+}
+
+void motor::resetDT()
+{
+    imeReset(IME_LEFT);
+    imeReset(IME_RIGHT);
+}
+
 void motor::setLeftDriveTrain(int speed)
 {
     motorSet(DRIVE_LEFT, speed);
