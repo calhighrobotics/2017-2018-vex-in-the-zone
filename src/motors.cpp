@@ -10,7 +10,7 @@
 #define LIFT_TL 5
 #define LIFT_BR 6
 #define LIFT_TR 7
-#define DRIVE_RIGHT 4
+#define DRIVE_RIGHT 8
 #define MGL_RIGHT 9
 #define CLAW 10
 
