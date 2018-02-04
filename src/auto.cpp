@@ -109,6 +109,7 @@ void scoreStationary()
     // back up a bit to fully lower the lift
     straight(64, -64);
     stop();
+    claw(CLOSE);
     lift(0);
 }
 
