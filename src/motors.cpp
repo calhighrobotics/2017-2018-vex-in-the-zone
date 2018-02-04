@@ -162,14 +162,13 @@ void motor::setMglTarget(double targetPos)
 
 void motor::setMgl(int drive)
 {
-    if (getMglPos() > MAX_POS)
+    /*if (getMglPos() > MAX_POS)
     {
         drive = 0;
-    }
-    else if (getMglPos() < MIN_POS)
+    }*/
+    if (getMglPos() < MIN_POS)
     {
         drive = 0;
-        imeReset(IME_MGL);
     }
     motorSet(MGL_LEFT, drive);
     motorSet(MGL_RIGHT, -drive);
