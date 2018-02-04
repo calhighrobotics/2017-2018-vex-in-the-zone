@@ -146,7 +146,7 @@ LoopState displayBattery(const ButtonState& buttons)
 
 LoopState liftControl(const ButtonState& buttons)
 {
-    lcdSetText(LCD_PORT, 1, "Lift Control");
+    lcdPrint(LCD_PORT, 1, "lift pos = %.1f", motor::getLiftPos());
     lcdSetText(LCD_PORT, 2, "v              ^");
     if (buttons.pressed(LCD_BTN_LEFT))
     {
@@ -156,11 +156,11 @@ LoopState liftControl(const ButtonState& buttons)
     {
         motor::setLift(127);
     }
-    else
+    else if (!isJoystickConnected(1))
     {
         motor::setLift(0);
     }
-    if (buttons.justPressed(LCD_BTN_CENTER) || isJoystickConnected(1))
+    if (buttons.justPressed(LCD_BTN_CENTER))
     {
         return AUTON_SELECT;
     }
