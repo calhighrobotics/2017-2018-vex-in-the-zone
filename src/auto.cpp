@@ -97,7 +97,7 @@ void scoreStationary()
     // back up a bit to fully lower the lift
     straight(64, -64);
     stop();
-    lift(5);
+    lift(0);
 }
 
 void turnCW(unsigned int angle, int turnRadius, int leftPower)
