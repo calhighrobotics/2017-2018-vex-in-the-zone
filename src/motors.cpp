@@ -27,6 +27,7 @@
 // settings for various button-controled parts
 #define CLAW_SPEED 63
 #define TB_SPEED 63
+#define MGL_SPEED 63
 
 #define MAX_POS 127.0
 #define MIN_POS 0.0
@@ -265,6 +266,6 @@ void motor::setTwistyBoi(Direction direction)
 
 void motor::setMobileGoalLift(Direction direction)
 {
-    /*int speed = speedControl(direction, MGL_SPEED, -MGL_SPEED);
-    motorSet(MGL, speed);*/
+    int speed = speedControl(direction, MGL_SPEED, -MGL_SPEED);
+    setMgl(speed);
 }
