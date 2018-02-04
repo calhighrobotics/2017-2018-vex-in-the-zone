@@ -9,7 +9,7 @@ auton::AutonID auton::autonid = SCORE_STATIONARY;
 static pid::Module pidModules[PID_MODULE_COUNT] =
 {
     pid::Module(motor::setLift, motor::getLiftTarget, motor::getLiftPos,
-        /*pid*/ 0, 0, 0, /*maxError=*/20),
+    /*pid*/ 0, 0, 0, /*maxError=*/20, /*debug=*/true),
     pid::Module(motor::setMgl, motor::getMglTarget, motor::getMglPos,
         /*pid*/ 0, 0, 0, /*maxError=*/20)
 };
