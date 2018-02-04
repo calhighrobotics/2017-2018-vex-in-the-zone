@@ -54,8 +54,8 @@ enum Direction
     UP = 1,
     DOWN = -1,
     // claw
-    OPEN = 1,
-    CLOSE = -1,
+    CLOSE = 1,
+    OPEN = -1,
     // twisty boi
     FORWARD = 1,
     BACKWARD = -1
