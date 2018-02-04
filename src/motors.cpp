@@ -139,7 +139,7 @@ void motor::slewRateManager(void*)
                     }
                 }
                 // finally, set the motor
-                motorSet(port, drive);
+                //motorSet(port, drive);
             }
         }
         taskDelayUntil(&now, MOTOR_POLL_RATE);
@@ -188,10 +188,10 @@ void motor::setLift(int drive)
     {
         drive = 0;
     }
-    motorRequest(LIFT_BL, -drive);
-    motorRequest(LIFT_TL, -drive);
-    motorRequest(LIFT_BR, drive);
-    motorRequest(LIFT_TR, drive);
+    motorSet(LIFT_BL, -drive);
+    motorSet(LIFT_TL, -drive);
+    motorSet(LIFT_BR, drive);
+    motorSet(LIFT_TR, drive);
 }
 
 double motor::getMglPos()
@@ -227,18 +227,18 @@ void motor::setMglTarget(double targetPos)
 
 void motor::setMgl(int drive)
 {
-    motorRequest(MGL_LEFT, drive);
-    motorRequest(MGL_RIGHT, -drive);
+    motorSet(MGL_LEFT, drive);
+    motorSet(MGL_RIGHT, -drive);
 }
 
 void motor::setLeftDriveTrain(int speed)
 {
-    motorRequest(DRIVE_LEFT, speed);
+    motorSet(DRIVE_LEFT, speed);
 }
 
 void motor::setRightDriveTrain(int speed)
 {
-    motorRequest(DRIVE_RIGHT, -speed);
+    motorSet(DRIVE_RIGHT, -speed);
 }
 
 void motor::setLift(Direction direction)
@@ -254,13 +254,13 @@ void motor::setLift(Direction direction)
 void motor::setClaw(Direction direction)
 {
     int speed = speedControl(direction, CLAW_SPEED, -CLAW_SPEED);
-    motorRequest(CLAW, speed);
+    motorSet(CLAW, speed);
 }
 
 void motor::setTwistyBoi(Direction direction)
 {
     int speed = speedControl(direction, TB_SPEED, -TB_SPEED);
-    motorRequest(TWISTY_BOI, speed);
+    motorSet(TWISTY_BOI, speed);
 }
 
 void motor::setMobileGoalLift(Direction direction)
