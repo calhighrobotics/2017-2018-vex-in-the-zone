@@ -23,7 +23,7 @@ static void stop();
 // other stuff
 static void lift(double target); // max=127, min=0
 static void claw(motor::Direction direction);
-static void mgl(motor::Direction direction, unsigned long waitTime);
+static void mgl(double target);
 
 // main point of execution for the autonomous period
 void autonomous()
@@ -59,13 +59,13 @@ void scoreMgWithCone()
     claw(CLOSE);
     lift(63);
     // drive over to the mobile goal
-    straight(756, -127);
+    straight(500, -127);
     stop();
     // put the cone on the mobile goal
     lift(-31);
     claw(OPEN);
     // pick up the mobile goal
-    mgl(UP, 1300);
+    mgl(63);
     // drive over to the white tape
     straight(740, 127);
     // align with the 20pt zone
@@ -75,7 +75,7 @@ void scoreMgWithCone()
     // score the mobile goal into the 20pt zone
     straight(530, -127);
     stop();
-    mgl(DOWN, 1000);
+    mgl(0);
     // get out of the bumps to give the driver some extra time
     straight(450, 127);
     stop();
@@ -195,9 +195,28 @@ void claw(motor::Direction direction)
     motor::setClaw(motor::STOP);
 }
 
-void mgl(motor::Direction direction, unsigned long waitTime)
+void mgl(double target)
 {
-    motor::setMobileGoalLift(direction);
-    taskDelay(waitTime);
-    motor::setMobileGoalLift(motor::STOP);
+    double error = target - motor::getMglPos();
+    unsigned long now = millis();
+    if (error > 0)
+    {
+        // going up
+        while (motor::getMglPos() < target)
+        {
+            motor::setMgl(63);
+            taskDelayUntil(&now, MOTOR_POLL_RATE);
+        }
+    }
+    else if (error < 0)
+    {
+        // going down
+        while (motor::getMglPos() > target)
+        {
+            motor::setMgl(-63);
+            taskDelayUntil(&now, MOTOR_POLL_RATE);
+        }
+    }
+    // stop the lift
+    motor::setMgl(0);
 }
