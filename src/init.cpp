@@ -3,7 +3,7 @@
 #include "main.hpp"
 
 // declared in main.hpp
-auton::AutonID auton::autonid = SCORE_STATIONARY;
+auton::AutonID auton::autonid = FORWARD_BACKWARD;
 
 // PID data for lift and mgl
 static pid::Module pidModules[PID_MODULE_COUNT] =
