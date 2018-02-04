@@ -14,6 +14,9 @@
 #define MGL_RIGHT 9
 #define CLAW 10
 
+// amount of ports on the cortex
+#define PORT_COUNT 10
+
 // IME network
 #define IME_RIGHT 0
 #define IME_LEFT 1
@@ -30,6 +33,7 @@
 #define COUNTS_PER_REV_TORQUE 627.2 // IME counts per rev in high torque mode
 #define LIFT_MAX_REVS 6.0
 #define MGL_MAX_REVS 3.0
+#define SLEW_RATE 10 // limit for how large the difference in motor drive can be
 
 static double liftTarget = 0;
 // protects liftTarget from being accessed by two tasks at the same time
@@ -37,6 +41,10 @@ static Mutex liftTargetMutex;
 
 static double mglTarget = 0;
 static Mutex mglTargetMutex;
+
+// requested motor values
+static int requested[PORT_COUNT] = {}; // zero-initialized
+static Mutex requestedMutex[PORT_COUNT];
 
 // converts a Direction to an actual speed
 static int speedControl(motor::Direction direction, int up, int down)
@@ -52,12 +60,26 @@ static int speedControl(motor::Direction direction, int up, int down)
     return 0;
 }
 
+// requests a new drive speed to the slew rate manager
+static void motorRequest(int port, int drive)
+{
+    mutexTake(requestedMutex[port], -1);
+    requested[port] = drive;
+    mutexGive(requestedMutex[port]);
+}
+
 // declared in main.hpp
 
-void init::initIMEs()
+void motor::init()
 {
+    // create mutexes
     liftTargetMutex = mutexCreate();
     mglTargetMutex = mutexCreate();
+    for (int port = 0; port < PORT_COUNT; ++port)
+    {
+        requestedMutex[port] = mutexCreate();
+    }
+    // initialize IMEs
     int imeCount = imeInitializeAll();
     if (imeCount != IME_COUNT)
     {
@@ -68,6 +90,56 @@ void init::initIMEs()
     imeReset(IME_LEFT);
     imeReset(IME_MGL);
     imeReset(IME_LIFT);
+}
+
+void motor::slewRateManager(void*)
+{
+    // closed loop updating the motors
+    unsigned long now = millis();
+    while (true)
+    {
+        // go through each port
+        for (int port = 0; port < PORT_COUNT; ++port)
+        {
+            // see if we need to change the motor value
+            int drive = motorGet(port);
+            mutexTake(requestedMutex[port], -1);
+            int req = requested[port];
+            mutexGive(requestedMutex[port]);
+            if (req != drive)
+            {
+                if (req > drive)
+                {
+                    // increasing
+                    if (req - drive > SLEW_RATE)
+                    {
+                        // limit the increase by slew rate
+                        drive += SLEW_RATE;
+                    }
+                    else
+                    {
+                        drive = req;
+                    }
+                }
+                else if (req < drive)
+                {
+                    // decreasing
+                    if (req - drive < -SLEW_RATE)
+                    {
+                        // limit the increase by slew rate
+                        drive -= SLEW_RATE;
+                    }
+                    else
+                    {
+                        drive = req;
+                    }
+                }
+                // finally, set the motor
+                motorSet(port, drive);
+            }
+        }
+        taskDelayUntil(&now, MOTOR_POLL_RATE);
+    }
 }
 
 double motor::getLiftPos()
@@ -151,18 +223,18 @@ void motor::setMglTarget(double targetPos)
 
 void motor::setMgl(int drive)
 {
-    motorSet(MGL_LEFT, drive);
-    motorSet(MGL_RIGHT, -drive);
+    motorRequest(MGL_LEFT, drive);
+    motorRequest(MGL_RIGHT, -drive);
 }
 
 void motor::setLeftDriveTrain(int speed)
 {
-    motorSet(DRIVE_LEFT, speed);
+    motorRequest(DRIVE_LEFT, speed);
 }
 
 void motor::setRightDriveTrain(int speed)
 {
-    motorSet(DRIVE_RIGHT, -speed);
+    motorRequest(DRIVE_RIGHT, -speed);
 }
 
 void motor::setLift(Direction direction)
@@ -178,13 +250,13 @@ void motor::setLift(Direction direction)
 void motor::setClaw(Direction direction)
 {
     int speed = speedControl(direction, CLAW_SPEED, -CLAW_SPEED);
-    motorSet(CLAW, speed);
+    motorRequest(CLAW, speed);
 }
 
 void motor::setTwistyBoi(Direction direction)
 {
     int speed = speedControl(direction, TB_SPEED, -TB_SPEED);
-    motorSet(TWISTY_BOI, speed);
+    motorRequest(TWISTY_BOI, speed);
 }
 
 void motor::setMobileGoalLift(Direction direction)
