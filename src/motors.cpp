@@ -86,10 +86,14 @@ void motor::init()
         printf("ERROR: INCORRECT NUMBER OF IMES INITIALIZED (%d, expected %d)\n"
             "EXPECT UNRELIABLE BEHAVIOR\n", imeCount, IME_COUNT);
     }
-    imeReset(IME_RIGHT);
-    imeReset(IME_LEFT);
-    imeReset(IME_MGL);
-    imeReset(IME_LIFT);
+    else
+    {
+        imeReset(IME_RIGHT);
+        imeReset(IME_LEFT);
+        imeReset(IME_MGL);
+        imeReset(IME_LIFT);
+        print("IMEs ok!");
+    }
 }
 
 void motor::slewRateManager(void*)
