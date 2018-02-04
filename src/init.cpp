@@ -19,7 +19,7 @@ static pid::Module pidModules[PID_MODULE_COUNT] =
 void initializeIO()
 {
     // automatically resets the cortex if bad stuff happens, e.g. a static shock
-    watchdogInit();
+    //watchdogInit();
     sensor::init();
 }
 
