@@ -117,37 +117,33 @@ void turnCW(unsigned int angle, int turnRadius, int leftPower)
      */
     int rightPower = (((int) turnRadius - (int) BOT_RADIUS) * leftPower) /
         ((int) turnRadius + (int) BOT_RADIUS);
-    /*
-     * leftSpeed*T = 2*PI*(turnRadius+BOT_RADIUS)
-     * T = 2*PI*(turnRadius+BOT_RADIUS)/leftSpeed
-     * waitTime = ((angle*PI/180 rad)/(2*PI rad))*T
-     * = (angle/360)*T
-     * = (angle/360)*(2*PI*(turnRadius+BOT_RADIUS))/(leftSpeed)
-     * = (angle*PI*(turnRadius+BOT_RADIUS))/(180*leftSpeed)
-     * = (angle*PI*(turnRadius+BOT_RADIUS))/
-     *       (180*leftPower/127*(2*PI*WHEEL_RADIUS*MOTOR_SPEED/(1 rotation)))
-     * = (angle*127*(turnRadius+BOT_RADIUS))/
-     *       (leftPower*360*WHEEL_RADIUS*MOTOR_SPEED) (seconds)
-     * = (angle*(turnRadius+BOT_RADIUS)*3175)/
-     *       (leftPower*WHEEL_RADIUS*MOTOR_SPEED*9) (milliseconds)
-     * (rearranged to take advantage of integer arithmetic and constant folding)
-     */
-    unsigned long waitTime = ((turnRadius + BOT_RADIUS) * 3175ul * angle) /
-        (WHEEL_RADIUS * MOTOR_SPEED * 9ul * leftPower);
+    // calculate the arc outside length
+    unsigned long distance = (turnRadius + BOT_RADIUS) * angle * PI / 180;
+    motor::resetDT();
     motor::setLeftDriveTrain(leftPower);
     motor::setRightDriveTrain(rightPower);
-    taskDelay(waitTime);
+    unsigned long now = millis();
+    while (2.0 * WHEEL_RADIUS * PI * motor::getLeftRotations() < distance)
+    {
+        taskDelayUntil(&now, MOTOR_POLL_RATE);
+    }
 }
 
 void turnCCW(unsigned int angle, int turnRadius, int rightPower)
 {
+    // very similar to how turnCW calculates rightPower
     int leftPower = (((int) turnRadius - (int) BOT_RADIUS) * rightPower) /
         ((int) turnRadius + (int) BOT_RADIUS);
-    unsigned long waitTime = ((turnRadius + BOT_RADIUS) * 3175ul * angle) /
-        (WHEEL_RADIUS * MOTOR_SPEED * 9ul * rightPower);
+    // calculate the outside arc length
+    unsigned long distance = (turnRadius + BOT_RADIUS) * angle * PI / 180;
+    motor::resetDT();
     motor::setLeftDriveTrain(leftPower);
     motor::setRightDriveTrain(rightPower);
-    taskDelay(waitTime);
+    unsigned long now = millis();
+    while (2.0 * WHEEL_RADIUS * PI * motor::getRightRotations() < distance)
+    {
+        taskDelayUntil(&now, MOTOR_POLL_RATE);
+    }
 }
 
 void straight(unsigned long distance, int power)
