@@ -26,7 +26,7 @@
 
 // settings for various button-controled parts
 #define CLAW_SPEED 63
-#define TB_SPEED 63
+#define TB_SPEED 127
 #define MGL_SPEED 63
 
 #define MAX_POS 127.0
