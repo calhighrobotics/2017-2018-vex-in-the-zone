@@ -21,7 +21,7 @@ static void turnCCW(unsigned int angle, int turnRadius, int rightPower);
 static void straight(unsigned long distance, int power);
 static void stop();
 // other stuff
-static void lift(motor::Direction direction, unsigned long waitTime);
+static void lift(double target); // max=127, min=0
 static void claw(motor::Direction direction);
 static void mgl(motor::Direction direction, unsigned long waitTime);
 
@@ -55,12 +55,12 @@ void scoreMgWithCone()
     // start pointed backwards, with the cone in the mgl part
     // pick up the cone
     claw(CLOSE);
-    lift(UP, 1200);
+    lift(63);
     // drive over to the mobile goal
     straight(950 , -127);
     stop();
     // put the cone on the mobile goal
-    lift(DOWN, 1200);
+    lift(-31);
     claw(OPEN);
     // pick up the mobile goal
     mgl(UP, 1300);
@@ -85,17 +85,17 @@ void scoreStationary()
     // start on the middle
     // pick up the cone
     claw(CLOSE);
-    lift(UP, 4200);
+    lift(126);
     // go up to the stationary goal
     straight(96, 64);
     stop();
     // score the preload
-    lift(DOWN, 950);
+    lift(100);
     claw(OPEN);
     // back up a bit to fully lower the lift
     straight(64, -64);
     stop();
-    lift(DOWN, 2800);
+    lift(5);
 }
 
 void turnCW(unsigned int angle, int turnRadius, int leftPower)
@@ -160,11 +160,30 @@ void stop()
     motor::setRightDriveTrain(0);
 }
 
-void lift(motor::Direction direction, unsigned long waitTime)
+void lift(double target)
 {
-    motor::setLift(direction);
-    taskDelay(waitTime);
-    motor::setLift(motor::STOP);
+    double error = target - motor::getLiftPos();
+    unsigned long now = millis();
+    if (error > 0)
+    {
+        // going up
+        motor::setLift(127);
+        while (motor::getLiftPos() < target)
+        {
+            taskDelayUntil(&now, MOTOR_POLL_RATE);
+        }
+    }
+    else if (error < 0)
+    {
+        motor::setLift(-127);
+        // going down
+        while (motor::getLiftPos() > target)
+        {
+            taskDelayUntil(&now, MOTOR_POLL_RATE);
+        }
+    }
+    // stop the lift
+    motor::setLift(0);
 }
 
 void claw(motor::Direction direction)

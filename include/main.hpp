@@ -80,7 +80,6 @@ void setLeftDriveTrain(int speed);
 void setRightDriveTrain(int speed);
 
 // other general stuff
-void setLift(Direction direction);
 void setClaw(Direction direction);
 void setTwistyBoi(Direction direction);
 void setMobileGoalLift(Direction direction);
