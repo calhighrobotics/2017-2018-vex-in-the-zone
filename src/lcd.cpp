@@ -94,6 +94,7 @@ LoopState autonSelect(const ButtonState& buttons)
     // used for printing the name of an autonomous program
     static const char* autonNames[AUTONID_MAX + 1] =
     {
+        "Nothing",
         "Forward+Backward",
         "Score MG w/Cone",
         "Score Stationary"

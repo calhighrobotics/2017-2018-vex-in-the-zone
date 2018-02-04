@@ -3,7 +3,7 @@
 #include "main.hpp"
 
 // declared in main.hpp
-auton::AutonID auton::autonid = FORWARD_BACKWARD;
+auton::AutonID auton::autonid = NOTHING;
 
 // PID data for lift and mgl
 static pid::Module pidModules[PID_MODULE_COUNT] =

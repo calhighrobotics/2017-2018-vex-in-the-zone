@@ -39,6 +39,8 @@ void autonomous()
     case auton::SCORE_STATIONARY:
         scoreStationary();
         break;
+    default:
+        ; // just do nothing
     }
 }
 
