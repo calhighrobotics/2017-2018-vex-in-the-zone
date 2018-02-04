@@ -12,7 +12,7 @@
 
 // autonomous plans
 static void forwardBackward();
-static void scoreMgWithCone();
+static void scoreMgWithCone(bool left);
 static void scoreStationary();
 
 // dt functions require a stop() at the end to allow chaining
@@ -33,8 +33,11 @@ void autonomous()
     case auton::FORWARD_BACKWARD:
         forwardBackward();
         break;
-    case auton::SCORE_MG_WITH_CONE:
-        scoreMgWithCone();
+    case auton::MG_CONE_LEFT:
+        scoreMgWithCone(true);
+        break;
+    case auton::MG_CONE_RIGHT:
+        scoreMgWithCone(false);
         break;
     case auton::SCORE_STATIONARY:
         scoreStationary();
@@ -51,7 +54,7 @@ void forwardBackward()
     stop();
 }
 
-void scoreMgWithCone()
+void scoreMgWithCone(bool left)
 {
     using namespace motor;
     // start pointed backwards, with the cone in the mgl part
@@ -69,9 +72,18 @@ void scoreMgWithCone()
     // drive over to the white tape
     straight(740, 127);
     // align with the 20pt zone
-    turnCCW(45, 0, 64);
-    straight(512, 127);
-    turnCCW(90, 0, 64);
+    if (left)
+    {
+        turnCCW(45, 0, 64);
+        straight(512, 127);
+        turnCCW(90, 0, 64);
+    }
+    else
+    {
+        turnCW(45, 0, 64);
+        straight(512, 127);
+        turnCW(90, 0, 64);
+    }
     // score the mobile goal into the 20pt zone
     straight(530, -127);
     stop();

@@ -96,7 +96,8 @@ LoopState autonSelect(const ButtonState& buttons)
     {
         "Nothing",
         "Forward+Backward",
-        "Score MG w/Cone",
+        "MG+Cone Left",
+        "MG+Cone Right",
         "Score Stationary"
     };
     // see if the left/right buttons were just pressed
