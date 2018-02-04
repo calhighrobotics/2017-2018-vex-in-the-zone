@@ -34,7 +34,6 @@
 #define COUNTS_PER_REV_TORQUE 627.2 // IME counts per rev in high torque mode
 #define LIFT_MAX_REVS 6.0
 #define MGL_MAX_REVS 3.0
-#define SLEW_RATE 10 // limit for how large the difference in motor drive can be
 
 static double liftTarget = 0;
 // protects liftTarget from being accessed by two tasks at the same time
@@ -42,10 +41,6 @@ static Mutex liftTargetMutex;
 
 static double mglTarget = 0;
 static Mutex mglTargetMutex;
-
-// requested motor values
-static int requested[PORT_COUNT] = {}; // zero-initialized
-static Mutex requestedMutex[PORT_COUNT];
 
 // converts a Direction to an actual speed
 static int speedControl(motor::Direction direction, int up, int down)
@@ -61,14 +56,6 @@ static int speedControl(motor::Direction direction, int up, int down)
     return 0;
 }
 
-// requests a new drive speed to the slew rate manager
-static void motorRequest(int port, int drive)
-{
-    mutexTake(requestedMutex[port], -1);
-    requested[port] = drive;
-    mutexGive(requestedMutex[port]);
-}
-
 // declared in main.hpp
 
 void motor::init()
@@ -76,10 +63,6 @@ void motor::init()
     // create mutexes
     liftTargetMutex = mutexCreate();
     mglTargetMutex = mutexCreate();
-    for (int port = 0; port < PORT_COUNT; ++port)
-    {
-        requestedMutex[port] = mutexCreate();
-    }
     // initialize IMEs
     int imeCount = imeInitializeAll();
     if (imeCount != IME_COUNT)
@@ -94,56 +77,6 @@ void motor::init()
         imeReset(IME_MGL);
         imeReset(IME_LIFT);
         //print("IMEs ok!");
-    }
-}
-
-void motor::slewRateManager(void*)
-{
-    // closed loop updating the motors
-    unsigned long now = millis();
-    while (true)
-    {
-        // go through each port
-        for (int port = 0; port < PORT_COUNT; ++port)
-        {
-            // see if we need to change the motor value
-            int drive = motorGet(port);
-            mutexTake(requestedMutex[port], -1);
-            int req = requested[port];
-            mutexGive(requestedMutex[port]);
-            if (req != drive)
-            {
-                if (req > drive)
-                {
-                    // increasing
-                    if (req - drive > SLEW_RATE)
-                    {
-                        // limit the increase by slew rate
-                        drive += SLEW_RATE;
-                    }
-                    else
-                    {
-                        drive = req;
-                    }
-                }
-                else if (req < drive)
-                {
-                    // decreasing
-                    if (req - drive < -SLEW_RATE)
-                    {
-                        // limit the increase by slew rate
-                        drive -= SLEW_RATE;
-                    }
-                    else
-                    {
-                        drive = req;
-                    }
-                }
-                // finally, set the motor
-                //motorSet(port, drive);
-            }
-        }
-        taskDelayUntil(&now, MOTOR_POLL_RATE);
     }
 }
 

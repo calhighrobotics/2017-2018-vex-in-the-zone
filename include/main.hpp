@@ -44,8 +44,6 @@ namespace motor
 {
 // does motor initialization stuff
 void init();
-// task that acts as a slew rate manager
-void slewRateManager(void*);
 
 // indicates a motor direction
 enum Direction
