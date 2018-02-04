@@ -59,7 +59,7 @@ void scoreMgWithCone()
     claw(CLOSE);
     lift(63);
     // drive over to the mobile goal
-    straight(950 , -127);
+    straight(756, -127);
     stop();
     // put the cone on the mobile goal
     lift(-31);
@@ -67,11 +67,11 @@ void scoreMgWithCone()
     // pick up the mobile goal
     mgl(UP, 1300);
     // drive over to the white tape
-    straight(950, 127);
+    straight(740, 127);
     // align with the 20pt zone
     turnCCW(45, 0, 64);
-    straight(500, 127);
-    turnCW(90, 0, 64);
+    straight(512, 127);
+    turnCCW(90, 0, 64);
     // score the mobile goal into the 20pt zone
     straight(530, -127);
     stop();
