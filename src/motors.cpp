@@ -166,7 +166,7 @@ void motor::setMgl(int drive)
     {
         drive = 0;
     }*/
-    if (getMglPos() < MIN_POS)
+    if (drive < 0 && getMglPos() < MIN_POS)
     {
         drive = 0;
     }
