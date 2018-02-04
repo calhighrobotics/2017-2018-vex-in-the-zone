@@ -52,24 +52,20 @@ void forwardBackward()
 void scoreMgWithCone()
 {
     using namespace motor;
+    // start pointed backwards, with the cone in the mgl part
     // pick up the cone
     claw(CLOSE);
     lift(UP, 1200);
     // drive over to the mobile goal
-    straight(950 , 127);
+    straight(950 , -127);
     stop();
     // put the cone on the mobile goal
     lift(DOWN, 1200);
     claw(OPEN);
-    straight(32, -64);
-    // do a 180
-    turnCW(180, 0, 127);
     // pick up the mobile goal
-    straight(35, -64);
-    stop();
     mgl(UP, 1300);
     // drive over to the white tape
-    straight(950, -127);
+    straight(950, 127);
     // align with the 20pt zone
     turnCCW(45, 0, 64);
     straight(500, 127);
