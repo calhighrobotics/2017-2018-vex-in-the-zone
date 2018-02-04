@@ -148,7 +148,7 @@ void straight(unsigned long distance, int power)
     motor::setLeftDriveTrain(power);
     motor::setRightDriveTrain(power);
     unsigned long now = millis();
-    while (2.0 * WHEEL_RADIUS * PI * motor::getLeftRotations() < distance)
+    while (2.0 * WHEEL_RADIUS * PI * abs(motor::getLeftRotations()) < distance)
     {
         taskDelayUntil(&now, MOTOR_POLL_RATE);
     }

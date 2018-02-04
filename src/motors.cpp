@@ -176,7 +176,7 @@ double motor::getRightRotations()
 {
     int counts;
     imeGet(IME_RIGHT, &counts);
-    return counts / COUNTS_PER_REV_TORQUE;
+    return -counts / COUNTS_PER_REV_TORQUE;
 }
 
 void motor::resetDT()
