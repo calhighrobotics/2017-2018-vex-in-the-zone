@@ -84,7 +84,7 @@ double motor::getLiftPos()
 {
     int counts;
     imeGet(IME_LIFT, &counts);
-    return MAX_POS / (LIFT_MAX_REVS * COUNTS_PER_REV_TORQUE) * -counts;
+    return MAX_POS / (LIFT_MAX_REVS * COUNTS_PER_REV_TORQUE) * counts;
 }
 
 double motor::getLiftTarget()
@@ -119,10 +119,10 @@ void motor::setLift(int drive)
         drive = 0;
         imeReset(IME_LIFT);
     }
-    /*if (drive > 0 && getLiftPos() >= MAX_POS)
+    if (drive > 0 && getLiftPos() >= MAX_POS)
     {
         drive = 0;
-    }*/
+    }
     motorSet(LIFT_BL, -drive);
     motorSet(LIFT_TL, -drive);
     motorSet(LIFT_BR, drive);
