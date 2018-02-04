@@ -89,7 +89,7 @@ void scoreStationary()
     claw(CLOSE);
     lift(126);
     // go up to the stationary goal
-    straight(96, 64);
+    straight(160, 64);
     stop();
     // score the preload
     lift(100);
