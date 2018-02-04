@@ -32,7 +32,7 @@
 #define MAX_POS 127.0
 #define MIN_POS 0.0
 #define COUNTS_PER_REV_TORQUE 627.2 // IME counts per rev in high torque mode
-#define LIFT_MAX_REVS 6.0
+#define LIFT_MAX_REVS 4.4
 #define MGL_MAX_REVS 3.0
 
 static double liftTarget = 0;
@@ -84,7 +84,7 @@ double motor::getLiftPos()
 {
     int counts;
     imeGet(IME_LIFT, &counts);
-    return MAX_POS / (LIFT_MAX_REVS * COUNTS_PER_REV_TORQUE) * counts;
+    return MAX_POS / (LIFT_MAX_REVS * COUNTS_PER_REV_TORQUE) * -counts;
 }
 
 double motor::getLiftTarget()
