@@ -54,8 +54,8 @@ static LoopState autonSelect(const ButtonState& buttons);
 static LoopState displayBattery(const ButtonState& buttons);
 static LoopState liftControl(const ButtonState& buttons);
 
-// declared in main.h
-void init::lcdMain(void*)
+// declared in main.hpp
+void lcd::controller(void*)
 {
     lcdInit(LCD_PORT);
     lcdClear(LCD_PORT);

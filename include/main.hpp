@@ -17,14 +17,6 @@
 // amount of PID modules that exist
 #define PID_MODULE_COUNT 2
 
-// used by init.cpp to start essential tasks and initialize stuff
-// functions with void* parameter run in their own task
-namespace init
-{
-// starts up the LCD to do cool stuff, put on its own task by init.cpp
-void lcdMain(void*);
-} // end namespace init
-
 // stuff that has to do with autonomous
 namespace auton
 {
@@ -40,6 +32,12 @@ enum AutonID
 // determines what autonomous program to run
 extern AutonID autonid;
 } // end namespace auto
+
+namespace lcd
+{
+// controls the lcd screen
+void controller(void*);
+} // end namespace lcd
 
 // stuff that has to do with motors
 namespace motor
@@ -86,14 +84,6 @@ void setTwistyBoi(Direction direction);
 void setMobileGoalLift(Direction direction);
 } // end namespace motor
 
-namespace sensor
-{
-// initializes all sensors, should be run in initializeIO
-void init();
-// checks if the lift is fully down
-bool isLiftDown();
-}
-
 namespace pid
 {
 // PID settings for a single module
@@ -133,6 +123,14 @@ struct Module
 // uses a PID loop to control a PID module
 void controller(pid::Module* modules);
 } // end namespace pid
+
+namespace sensor
+{
+// initializes all sensors, should be run in initializeIO
+void init();
+// checks if the lift is fully down
+bool isLiftDown();
+} // end namespace sensor
 
 // these last 4 functions down here are what PROS uses internally to do cool
 //  stuff so it's not recommended to call them within the actual code

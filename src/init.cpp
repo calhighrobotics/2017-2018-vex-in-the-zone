@@ -29,11 +29,11 @@ void initialize()
 {
     setTeamName(TEAM_NAME);
     motor::init();
-    taskCreate(init::lcdMain, TASK_DEFAULT_STACK_SIZE, NULL,
+    taskCreate(lcd::controller, TASK_DEFAULT_STACK_SIZE, NULL,
         TASK_PRIORITY_DEFAULT - 1);
+    /*taskCreate(reinterpret_cast<TaskCode>(motor::slewRateManager),
+        TASK_DEFAULT_STACK_SIZE, NULL, TASK_PRIORITY_DEFAULT + 1);*/
     /*taskCreate(reinterpret_cast<TaskCode>(pid::controller),
         TASK_DEFAULT_STACK_SIZE, static_cast<void*>(pidModules),
         TASK_PRIORITY_DEFAULT - 1);*/
-    /*taskCreate(reinterpret_cast<TaskCode>(motor::slewRateManager),
-        TASK_DEFAULT_STACK_SIZE, NULL, TASK_PRIORITY_DEFAULT + 1);*/
 }
