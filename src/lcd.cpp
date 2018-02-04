@@ -59,7 +59,7 @@ void lcd::controller(void*)
 {
     lcdInit(LCD_PORT);
     lcdClear(LCD_PORT);
-    lcdSetBacklight(LCD_PORT, true);
+    lcdSetBacklight(LCD_PORT, false);
     // the action that should be taken, kinda like a state machine
     LoopState loopState = LIFT_CONTROL;
     // tells loop functions what buttons are being pressed
