@@ -15,10 +15,10 @@
 #define CLAW 10
 
 // IME network
-#define IME_LEFT 0
-#define IME_RIGHT 1
-#define IME_LIFT 2
-#define IME_MGL 3
+#define IME_RIGHT 0
+#define IME_LEFT 1
+#define IME_MGL 2
+#define IME_LIFT 3
 #define IME_COUNT 4 // number of IEMs
 
 // settings for various button-controled parts
@@ -61,13 +61,13 @@ void init::initIMEs()
     int imeCount = imeInitializeAll();
     if (imeCount != IME_COUNT)
     {
-        print("ERROR: INCORRECT NUMBER OF IMES INITIALIZED\n"
-            "EXPECT UNRELIABLE BEHAVIOR\n");
+        printf("ERROR: INCORRECT NUMBER OF IMES INITIALIZED (%d, expected %d)\n"
+            "EXPECT UNRELIABLE BEHAVIOR\n", imeCount, IME_COUNT);
     }
-    imeReset(IME_LEFT);
     imeReset(IME_RIGHT);
-    imeReset(IME_LIFT);
+    imeReset(IME_LEFT);
     imeReset(IME_MGL);
+    imeReset(IME_LIFT);
 }
 
 double motor::getLiftPos()
