@@ -5,15 +5,6 @@
 // declared in main.hpp
 auton::AutonID auton::autonid = NOTHING;
 
-// PID data for lift and mgl
-static pid::Module pidModules[PID_MODULE_COUNT] =
-{
-    pid::Module(motor::setLift, motor::getLiftTarget, motor::getLiftPos,
-    /*pid*/ 0, 0, 0, /*maxError=*/20, /*debug=*/true),
-    pid::Module(motor::setMgl, motor::getMglTarget, motor::getMglPos,
-        /*pid*/ 0, 0, 0, /*maxError=*/20)
-};
-
 // pre-initialization code, mostly just setting default pin modes and port
 //  states and stuff
 void initializeIO()
@@ -31,7 +22,4 @@ void initialize()
     motor::init();
     taskCreate(lcd::controller, TASK_DEFAULT_STACK_SIZE, NULL,
         TASK_PRIORITY_DEFAULT - 1);
-    /*taskCreate(reinterpret_cast<TaskCode>(pid::controller),
-        TASK_DEFAULT_STACK_SIZE, static_cast<void*>(pidModules),
-        TASK_PRIORITY_DEFAULT - 1);*/
 }

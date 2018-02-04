@@ -14,9 +14,6 @@
 // time it takes for a motor to be updated in milliseconds
 #define MOTOR_POLL_RATE 20
 
-// amount of PID modules that exist
-#define PID_MODULE_COUNT 2
-
 // stuff that has to do with autonomous
 namespace auton
 {
@@ -85,46 +82,6 @@ void setClaw(Direction direction);
 void setTwistyBoi(Direction direction);
 void setMobileGoalLift(Direction direction);
 } // end namespace motor
-
-namespace pid
-{
-// PID settings for a single module
-struct Module
-{
-    // function for setting motors
-    typedef void (*motorfunc_t)(int);
-    // function for getting a position
-    typedef double (*posfunc_t)();
-    // constructor
-    Module(motorfunc_t setMotors, posfunc_t getTargetPos, posfunc_t getPos,
-        double kp, double ki, double kd, double maxError, bool debug = false)
-        : setMotors(setMotors), getTargetPos(getTargetPos), getPos(getPos),
-        kp(kp), ki(ki), kd(kd), maxError(maxError), lastError(0), error(0),
-        integral(0), debug(debug) {}
-    // sets the motors
-    const motorfunc_t setMotors;
-    // gets the target position
-    const posfunc_t getTargetPos;
-    // gets the current position
-    const posfunc_t getPos;
-    // proportional, integral, and derivative constants
-    const double kp;
-    const double ki;
-    const double kd;
-    // absolute value of error should be lower than this for the integral term
-    //  to be allowed to kick in
-    const double maxError;
-    // runtime variables
-    double lastError;
-    double error;
-    double integral;
-    // true if debug info should be printed
-    const bool debug;
-};
-
-// uses a PID loop to control a PID module
-void controller(pid::Module* modules);
-} // end namespace pid
 
 namespace sensor
 {
